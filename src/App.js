@@ -8,6 +8,7 @@ import {
   ActionIcon,
   Container,
   rem,
+  Burger,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -16,8 +17,26 @@ import {
   IconBrandInstagram,
 } from "@tabler/icons-react";
 import { useState } from "react";
+import { Paper, Transition } from "@mantine/core";
+
+const HEADER_HEIGHT = rem(60);
 
 const useStyles = createStyles((theme) => ({
+  dropdown: {
+    position: "absolute",
+    top: HEADER_HEIGHT,
+    left: 0,
+    right: 0,
+    zIndex: 0,
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopWidth: 0,
+    overflow: "hidden",
+
+    [theme.fn.largerThan("sm")]: {
+      display: "none",
+    },
+  },
   inner: {
     display: "flex",
     justifyContent: "space-between",
@@ -74,6 +93,13 @@ const useStyles = createStyles((theme) => ({
   //       .color,
   //   },
   // },
+  burger: {
+    marginRight: theme.spacing.md,
+
+    [theme.fn.largerThan("sm")]: {
+      display: "none",
+    },
+  },
   linkActive: {
     backgroundColor: theme.colors.dark[6],
     "&, &:hover": {
@@ -132,6 +158,14 @@ function App() {
         // mb={120}
       >
         <Container className={classes.inner} style={{ maxWidth: "100%" }}>
+          <Burger
+            color="white"
+            opened={opened}
+            onClick={toggle}
+            size="sm"
+            className={classes.burger}
+          />
+
           <Group className={classes.links} spacing={5}>
             {items}
           </Group>
@@ -149,6 +183,18 @@ function App() {
             </ActionIcon>
           </Group>
         </Container>
+
+        <Transition transition="pop-top-right" duration={200} mounted={opened}>
+          {(styles) => (
+            <Paper
+              sx={{ background: "none", backgroundColor: "transparent" }}
+              className={classes.dropdown}
+              style={styles}
+            >
+              <Center>{items}</Center>
+            </Paper>
+          )}
+        </Transition>
       </Header>
       {/* <Center>
         <Image
