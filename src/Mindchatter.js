@@ -14,37 +14,37 @@ export default function Mindchatter({ modelInView }) {
   const secondGroup = useRef();
 
   useEffect(() => {
-    // if (modelInView === "first") {
-    gsap.to(firstGroup.current?.position, {
-      duration: 2,
-      x: 0,
-      y: 0,
-      z: 1,
-      ease: "power1.inOut",
-    });
-    gsap.to(secondGroup.current?.position, {
-      duration: 2,
-      x: 20,
-      y: -5.5,
-      z: 1,
-      ease: "power1.inOut",
-    });
-    // } else {
-    //   gsap.to(firstGroup.current?.position, {
-    //     duration: 2,
-    //     x: -20,
-    //     y: 0,
-    //     z: 1,
-    //     ease: "power1.inOut",
-    //   });
-    //   gsap.to(secondGroup.current?.position, {
-    //     duration: 2,
-    //     x: 0,
-    //     y: -5.5,
-    //     z: 1,
-    //     ease: "power1.inOut",
-    //   });
-    // }
+    if (modelInView !== "merch") {
+      gsap.to(firstGroup.current?.position, {
+        duration: 2,
+        x: 0,
+        y: 0,
+        z: 1,
+        ease: "power1.inOut",
+      });
+      gsap.to(secondGroup.current?.position, {
+        duration: 2,
+        x: 10,
+        y: -5.5,
+        z: 1,
+        ease: "power1.inOut",
+      });
+    } else {
+      gsap.to(firstGroup.current?.position, {
+        duration: 2,
+        x: -20,
+        y: 0,
+        z: 1,
+        ease: "power1.inOut",
+      });
+      gsap.to(secondGroup.current?.position, {
+        duration: 2,
+        x: 0,
+        y: -5.5,
+        z: 1,
+        ease: "power1.inOut",
+      });
+    }
   }, [modelInView]);
 
   return (
@@ -69,11 +69,48 @@ export default function Mindchatter({ modelInView }) {
         />
       </group>
       <group ref={secondGroup}>
-        <Model2
-          inView={modelInView === "second"}
-          //   position={secondModelPos}
-          rotation={[0, 0, 0]}
-        />
+        <group position={[-1.5, 0.65, -3]}>
+          <Model2
+            num={1}
+            inView={modelInView === "second"}
+            rotation={[0, 0, 0]}
+          />
+        </group>
+        <group position={[0, 0.65, -3]}>
+          <Model2
+            num={2}
+            inView={modelInView === "second"}
+            rotation={[0, 0, 0]}
+          />
+        </group>
+        <group position={[1.5, 0.65, -3]}>
+          <Model2
+            num={3}
+            inView={modelInView === "second"}
+            rotation={[0, 0, 0]}
+          />
+        </group>
+        <group position={[-1.5, -1, -3]}>
+          <Model2
+            num={4}
+            inView={modelInView === "second"}
+            rotation={[0, 0, 0]}
+          />
+        </group>
+        <group position={[0, -1, -3]}>
+          <Model2
+            num={5}
+            inView={modelInView === "second"}
+            rotation={[0, 0, 0]}
+          />
+        </group>
+        <group position={[1.5, -1, -3]}>
+          <Model2
+            num={6}
+            inView={modelInView === "second"}
+            rotation={[0, 0, 0]}
+          />
+        </group>
       </group>
       <SoftShadows samples={3} />
       <CameraControls
@@ -182,20 +219,27 @@ function Model2(props) {
   const group = useRef();
   const light = useRef();
   useFrame((state, delta) => {
-    if (props.inView) {
-      easing.dampE(
-        group.current.rotation,
-        [0, -state.pointer.x * (Math.PI / 9), 0],
-        1.5,
-        delta
-      );
-      //   easing.damp3(
-      //     group.current.position,
-      //     [0, -5.5, 1 - Math.abs(state.pointer.x)],
-      //     1,
-      //     delta
-      //   );
+    if (props.num % 2 === 0) {
+      group.current.rotation.y += delta * 0.3;
     }
+    if (props.num % 2 !== 0) {
+      group.current.rotation.y -= delta * 0.3;
+    }
+    // if (props.inView) {
+    //   easing.dampE(
+    //     group.current.rotation,
+    //     [0, -state.pointer.x * (Math.PI / 9), 0],
+    //     1.5,
+    //     delta
+    //   );
+    //   //   easing.damp3(
+    //   //     group.current.position,
+    //   //     [0, -5.5, 1 - Math.abs(state.pointer.x)],
+    //   //     1,
+    //   //     delta
+    //   //   );
+    // }
+
     easing.damp3(
       light.current.position,
       [state.pointer.x * 12, 0, 8 + state.pointer.y * 4],
