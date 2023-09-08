@@ -55,7 +55,7 @@ export default function Mindchatter({ modelInView }) {
       camera={{ position: [0, 1.5, 14], fov: 45 }}
     >
       <fog attach="fog" args={["black", 0, 20]} />
-      <ambientLight intensity={3} />
+      <ambientLight intensity={4} />
       <pointLight position={[10, -10, -20]} intensity={150} />
       <pointLight position={[-10, -10, -20]} intensity={150} />
       {/* <Model position={[0, -5.5, 3]} rotation={[0, 0, 0]} /> */}
@@ -64,7 +64,7 @@ export default function Mindchatter({ modelInView }) {
           inView={modelInView === "first"}
           inView2={modelInView}
           //   position={firstModelPos}
-          position={[0, -5.5, 1]}
+          //   position={[0, -5.5, 1]}
           rotation={[0, 0, 0]}
         />
       </group>
@@ -125,7 +125,8 @@ export default function Mindchatter({ modelInView }) {
 }
 
 function Model(props) {
-  const { nodes, materials } = useGLTF("/bust.glb");
+  //   const { nodes, materials } = useGLTF("/bust.glb");
+  const { nodes, materials } = useGLTF("/mindchatterBust.gltf");
   const group = useRef();
   const light = useRef();
   const meshRef = useRef();
@@ -167,49 +168,78 @@ function Model(props) {
     );
     easing.damp3(
       group.current.position,
-      [0, -5.5, 1 - Math.abs(state.pointer.x)],
+      [0, 0, 1 - Math.abs(state.pointer.x)],
       1,
       delta
     );
     // }
     easing.damp3(
       light.current.position,
-      [state.pointer.x * 12, 0, 8 + state.pointer.y * 4],
+      [state.pointer.x * 12, 0, 8 + state.pointer.y * 4 + 1],
       0.2,
       delta
     );
     // }
   });
   return (
+    // <group ref={group} {...props} dispose={null}>
+    //   <mesh
+    //     ref={meshRef}
+    //     scale={0.75}
+    //     castShadow
+    //     receiveShadow
+    //     geometry={nodes.bust.geometry}
+    //     material={materials.bust}
+    //     position={[4.681, 1.981, 7.974]}
+    //     rotation={[Math.PI / 2, 0, 0]}
+    //   >
+    //     <meshLambertMaterial color="#404044" />
+    //   </mesh>
+    //   <spotLight
+    //     // angle={0.5}
+    //     // penumbra={0.5}
+    //     ref={light}
+    //     castShadow
+    //     intensity={1000}
+    //     // shadow-mapSize={1024}
+    //     // shadow-bias={-0.001}
+    //   >
+    //     <orthographicCamera
+    //       attach="shadow-camera"
+    //       args={[-10, 10, -10, 10, 0.1, 50]}
+    //     />
+    //   </spotLight>
+    //   {/* <Annotation position={[3.5, 3, -1]}>Shows</Annotation>
+    //   <Annotation position={[-3, 5, 1]}>Merch</Annotation> */}
+    // </group>
+
     <group ref={group} {...props} dispose={null}>
       <mesh
+        position={[0, 0, 0]}
+        scale={2.2}
         ref={meshRef}
-        scale={0.75}
         castShadow
         receiveShadow
-        geometry={nodes.bust.geometry}
-        material={materials.bust}
-        position={[4.681, 1.981, 7.974]}
-        rotation={[Math.PI / 2, 0, 0]}
+        geometry={nodes.Default.geometry}
+        material={materials.Mat}
+        rotation={[0, -Math.PI / 2.5, 0]}
       >
         <meshLambertMaterial color="#404044" />
+        <spotLight
+          // angle={0.5}
+          // penumbra={0.5}
+          ref={light}
+          castShadow
+          intensity={1000}
+          // shadow-mapSize={1024}
+          // shadow-bias={-0.001}
+        >
+          <orthographicCamera
+            attach="shadow-camera"
+            args={[-10, 10, -10, 100, 0.1, 60]}
+          />
+        </spotLight>
       </mesh>
-      <spotLight
-        // angle={0.5}
-        // penumbra={0.5}
-        ref={light}
-        castShadow
-        intensity={1000}
-        // shadow-mapSize={1024}
-        // shadow-bias={-0.001}
-      >
-        <orthographicCamera
-          attach="shadow-camera"
-          args={[-10, 10, -10, 10, 0.1, 50]}
-        />
-      </spotLight>
-      {/* <Annotation position={[3.5, 3, -1]}>Shows</Annotation>
-      <Annotation position={[-3, 5, 1]}>Merch</Annotation> */}
     </group>
   );
 }
