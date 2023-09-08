@@ -1,6 +1,6 @@
 import React from "react";
 import Mindchattter from "./Mindchatter";
-import { Center, Image } from "@mantine/core";
+import { Center, Image, Text } from "@mantine/core";
 import {
   createStyles,
   Header,
@@ -15,9 +15,11 @@ import {
   IconBrandTwitter,
   IconBrandYoutube,
   IconBrandInstagram,
+  IconMail,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import { Paper, Transition } from "@mantine/core";
+import { useEffect } from "react";
 
 const HEADER_HEIGHT = rem(60);
 
@@ -106,7 +108,76 @@ const useStyles = createStyles((theme) => ({
       color: "white",
     },
   },
+
+  transitions: {
+    cursor: "pointer",
+    transition: "transform 0.4s, color 0.6s, textDecoration 0.5s",
+
+    "&:hover, &.active": {
+      textDecoration: "underline",
+      transform: "scale(1.05)",
+      color: theme.colorScheme === "dark" ? "white" : "white",
+    },
+  },
 }));
+
+function useScript(src) {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.type = "module";
+    script.src = src;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [src]);
+}
+
+function MyComponent(props) {
+  // This will add the script when MyComponent mounts and remove it when MyComponent unmounts
+  useScript("https://laylo.com/embeds/multidrop.js");
+
+  const [opacity, setOpacity] = React.useState(0); // set opacity to 0 by default
+
+  useEffect(() => {
+    if (props.modelInView === "shows") {
+      setOpacity(1);
+    } else {
+      setOpacity(0);
+    }
+  }, [props.modelInView]);
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        zIndex: 0,
+        height: "100vh",
+        width: "100vw",
+        opacity: opacity,
+        transition: "opacity 1s ease-in-out", // this adds the animation effect
+      }}
+    >
+      <div
+        style={{
+          width: "50%",
+          height: "100%",
+          position: "absolute",
+          top: "80%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+        id="multidrop"
+        data-theme="dark"
+        data-username="mindchatter_"
+        data-slug="Se3SH"
+        data-color="#b6bdce"
+        data-minimal="false"
+      ></div>
+    </div>
+  );
+}
 
 function App() {
   const links = [
@@ -144,6 +215,8 @@ function App() {
 
   return (
     <>
+      <MyComponent modelInView={modelInView} />
+
       <Header
         sx={{
           position: "absolute",
@@ -157,32 +230,55 @@ function App() {
         height={56}
         // mb={120}
       >
-        <Container className={classes.inner} style={{ maxWidth: "100%" }}>
+        {/* <Container className={classes.inner} style={{ maxWidth: "100%" }}>
           <Burger
             color="white"
             opened={opened}
             onClick={toggle}
             size="sm"
             className={classes.burger}
-          />
+          /> */}
 
-          {/* <Group className={classes.links} spacing={5}>
+        {/* <Group className={classes.links} spacing={5}>
             {items}
           </Group> */}
 
-          <Image src={"/mindlogo.png"} width={200} />
-          <Group spacing={2} className={classes.social} position="right" noWrap>
-            <ActionIcon variant="transparent" size="lg">
-              <IconBrandInstagram size="1.2rem" stroke={2} />
-            </ActionIcon>
-            <ActionIcon variant="transparent" size="lg">
-              <IconBrandTwitter size="1.2rem" stroke={2} />
-            </ActionIcon>
-            <ActionIcon variant="transparent" size="lg">
-              <IconBrandYoutube size="1.2rem" stroke={2} />
-            </ActionIcon>
-          </Group>
-        </Container>
+        <Center mt={15}>
+          <Image
+            onClick={() => setModelInView("home")}
+            sx={{ cursor: "pointer" }}
+            src={"/mindlogo.png"}
+            width={200}
+          />
+        </Center>
+        {/* <Center> */}
+
+        <Group
+          spacing={2}
+          position="center"
+          noWrap
+          sx={{
+            position: "fixed",
+            bottom: "10px",
+            width: "100%",
+            justifyContent: "center",
+          }}
+        >
+          <ActionIcon variant="transparent" size="lg">
+            <IconBrandInstagram size="1.2rem" stroke={2} />
+          </ActionIcon>
+          <ActionIcon variant="transparent" size="lg">
+            <IconBrandTwitter size="1.2rem" stroke={2} />
+          </ActionIcon>
+          <ActionIcon variant="transparent" size="lg">
+            <IconBrandYoutube size="1.2rem" stroke={2} />
+          </ActionIcon>
+          <ActionIcon variant="transparent" size="lg">
+            <IconMail size="1.2rem" stroke={2} />
+          </ActionIcon>
+        </Group>
+        {/* </Center> */}
+        {/* </Container> */}
 
         <Transition transition="pop-top-right" duration={200} mounted={opened}>
           {(styles) => (
@@ -196,6 +292,72 @@ function App() {
           )}
         </Transition>
       </Header>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "10%",
+          transform: "translateY(-50%) rotate(-90deg)",
+        }}
+      >
+        <Text
+          onClick={() => setModelInView("shows")}
+          className={classes.transitions}
+          size={30}
+          // color="dimmed"
+          color={modelInView === "shows" ? "white" : "dimmed"}
+          sx={{
+            textAlign: "center",
+            padding: "10px",
+            fontFamily: "OffBit, sans-serif",
+            borderRadius: "5px",
+            textDecoration: modelInView === "shows" ? "underline" : "none",
+            transform: modelInView === "shows" ? "scale(1.05)" : "none",
+          }}
+        >
+          S H O W S
+        </Text>
+      </div>
+
+      {/* Right Text ("Merch") */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          right: "10%",
+          transform: "translateY(-50%) rotate(90deg)",
+        }}
+      >
+        <Text
+          onClick={() => setModelInView("merch")}
+          className={classes.transitions}
+          size={30}
+          color={modelInView === "merch" ? "white" : "dimmed"}
+          sx={{
+            textAlign: "center",
+            padding: "10px",
+            fontFamily: "OffBit, sans-serif",
+            borderRadius: "5px",
+            textDecoration: modelInView === "merch" ? "underline" : "none",
+            transform: modelInView === "merch" ? "scale(1.05)" : "none",
+          }}
+        >
+          M E R C H
+        </Text>
+      </div>
+      {/* <Center> */}
+      {/* <iframe
+        style={{ position: "absolute", zIndex: 10 }}
+        src="https://laylo.com/mindchatter_/m/Se3SH"
+        width="50%"
+        height="580"
+        frameborder="0"
+        scrolling="no"
+        allowtransparency="true"
+      ></iframe> */}
+
+      {/* </Center> */}
 
       <Mindchattter modelInView={modelInView} />
     </>

@@ -5,6 +5,7 @@ import { Canvas, extend, useFrame } from "@react-three/fiber";
 import { useGLTF, SoftShadows, Html, CameraControls } from "@react-three/drei";
 import { easing, geometry } from "maath";
 import gsap from "gsap";
+import { Mesh } from "three";
 
 extend(geometry);
 
@@ -13,37 +14,37 @@ export default function Mindchatter({ modelInView }) {
   const secondGroup = useRef();
 
   useEffect(() => {
-    if (modelInView === "first") {
-      gsap.to(firstGroup.current?.position, {
-        duration: 2,
-        x: 0,
-        y: 0,
-        z: 1,
-        ease: "power1.inOut",
-      });
-      gsap.to(secondGroup.current?.position, {
-        duration: 2,
-        x: 20,
-        y: -5.5,
-        z: 1,
-        ease: "power1.inOut",
-      });
-    } else {
-      gsap.to(firstGroup.current?.position, {
-        duration: 2,
-        x: -20,
-        y: 0,
-        z: 1,
-        ease: "power1.inOut",
-      });
-      gsap.to(secondGroup.current?.position, {
-        duration: 2,
-        x: 0,
-        y: -5.5,
-        z: 1,
-        ease: "power1.inOut",
-      });
-    }
+    // if (modelInView === "first") {
+    gsap.to(firstGroup.current?.position, {
+      duration: 2,
+      x: 0,
+      y: 0,
+      z: 1,
+      ease: "power1.inOut",
+    });
+    gsap.to(secondGroup.current?.position, {
+      duration: 2,
+      x: 20,
+      y: -5.5,
+      z: 1,
+      ease: "power1.inOut",
+    });
+    // } else {
+    //   gsap.to(firstGroup.current?.position, {
+    //     duration: 2,
+    //     x: -20,
+    //     y: 0,
+    //     z: 1,
+    //     ease: "power1.inOut",
+    //   });
+    //   gsap.to(secondGroup.current?.position, {
+    //     duration: 2,
+    //     x: 0,
+    //     y: -5.5,
+    //     z: 1,
+    //     ease: "power1.inOut",
+    //   });
+    // }
   }, [modelInView]);
 
   return (
@@ -61,6 +62,7 @@ export default function Mindchatter({ modelInView }) {
       <group ref={firstGroup}>
         <Model
           inView={modelInView === "first"}
+          inView2={modelInView}
           //   position={firstModelPos}
           position={[0, -5.5, 1]}
           rotation={[0, 0, 0]}
@@ -89,21 +91,50 @@ function Model(props) {
   const { nodes, materials } = useGLTF("/bust.glb");
   const group = useRef();
   const light = useRef();
-  useFrame((state, delta) => {
-    if (props.inView) {
-      easing.dampE(
-        group.current.rotation,
-        [0, -state.pointer.x * (Math.PI / 9), 0],
-        1.5,
-        delta
-      );
-      easing.damp3(
-        group.current.position,
-        [0, -5.5, 1 - Math.abs(state.pointer.x)],
-        1,
-        delta
-      );
+  const meshRef = useRef();
+
+  useEffect(() => {
+    if (props.inView2 === "merch" || props.inView2 === "shows") {
+      gsap.to(meshRef.current?.material, {
+        duration: 1,
+        opacity: 0,
+        ease: "power1.inOut",
+      });
     }
+    if (props.inView2 === "home") {
+      gsap.to(meshRef.current?.material, {
+        duration: 1,
+        opacity: 1,
+        ease: "power1.inOut",
+      });
+    }
+  }, [props.inView2]);
+  useFrame((state, delta) => {
+    if (props.inView2 === "merch" || props.inView2 === "shows") {
+      //   meshRef.current.opacity = 0;
+      //   gsap.to(meshRef.current?.material, {
+      //     duration: 1,
+      //     opacity: 0,
+      //     ease: "power1.inOut",
+      //   });
+      //   console.log(meshRef.current.material);
+    }
+    meshRef.current.material.transparent = true;
+    // console.log(group.current);
+    // if (props.inView) {
+    easing.dampE(
+      group.current.rotation,
+      [0, -state.pointer.x * (Math.PI / 9), 0],
+      1.5,
+      delta
+    );
+    easing.damp3(
+      group.current.position,
+      [0, -5.5, 1 - Math.abs(state.pointer.x)],
+      1,
+      delta
+    );
+    // }
     easing.damp3(
       light.current.position,
       [state.pointer.x * 12, 0, 8 + state.pointer.y * 4],
@@ -115,11 +146,13 @@ function Model(props) {
   return (
     <group ref={group} {...props} dispose={null}>
       <mesh
+        ref={meshRef}
+        scale={0.75}
         castShadow
         receiveShadow
         geometry={nodes.bust.geometry}
         material={materials.bust}
-        position={[6.281, 0.581, 9.974]}
+        position={[4.681, 1.981, 7.974]}
         rotation={[Math.PI / 2, 0, 0]}
       >
         <meshLambertMaterial color="#404044" />

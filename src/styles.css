@@ -1,5 +1,12 @@
 @import url('https://rsms.me/inter/inter.css');
 
+@font-face {
+  font-family: 'OffBit';
+  src: url('../public/OffBit.otf') format('opentype'); /* URL is relative to the public folder */
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
 }
