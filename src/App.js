@@ -21,6 +21,8 @@ import { useState } from "react";
 import { Paper, Transition } from "@mantine/core";
 import { useEffect } from "react";
 
+import { isMobile } from "react-device-detect";
+
 const HEADER_HEIGHT = rem(60);
 
 const useStyles = createStyles((theme) => ({
@@ -230,7 +232,47 @@ function App() {
         height={56}
         // mb={120}
       >
-        {/* <Container className={classes.inner} style={{ maxWidth: "100%" }}>
+        {isMobile ? (
+          <>
+            <Container className={classes.inner} style={{ maxWidth: "100%" }}>
+              <Burger
+                color="white"
+                opened={opened}
+                onClick={toggle}
+                size="sm"
+                className={classes.burger}
+              />
+              <Group className={classes.links} spacing={5}>
+                {items}
+              </Group>
+              <Image
+                onClick={() => setModelInView("home")}
+                sx={{ cursor: "pointer" }}
+                src={"/mindlogo.png"}
+                width={200}
+              />
+              <Center>
+                <Group spacing={2} noWrap position="right">
+                  <ActionIcon variant="transparent" size="lg">
+                    <IconBrandInstagram size="1.2rem" stroke={2} />
+                  </ActionIcon>
+                  <ActionIcon variant="transparent" size="lg">
+                    <IconBrandTwitter size="1.2rem" stroke={2} />
+                  </ActionIcon>
+                  <ActionIcon variant="transparent" size="lg">
+                    <IconBrandYoutube size="1.2rem" stroke={2} />
+                  </ActionIcon>
+                  <ActionIcon variant="transparent" size="lg">
+                    <IconMail size="1.2rem" stroke={2} />
+                  </ActionIcon>
+                </Group>
+              </Center>
+            </Container>
+          </>
+        ) : (
+          <>
+            {" "}
+            {/* <Container className={classes.inner} style={{ maxWidth: "100%" }}>
           <Burger
             color="white"
             opened={opened}
@@ -238,47 +280,46 @@ function App() {
             size="sm"
             className={classes.burger}
           /> */}
-
-        {/* <Group className={classes.links} spacing={5}>
+            {/* <Group className={classes.links} spacing={5}>
             {items}
           </Group> */}
-
-        <Center mt={15}>
-          <Image
-            onClick={() => setModelInView("home")}
-            sx={{ cursor: "pointer" }}
-            src={"/mindlogo.png"}
-            width={200}
-          />
-        </Center>
-        {/* <Center> */}
-
-        <Group
-          spacing={2}
-          position="center"
-          noWrap
-          sx={{
-            position: "fixed",
-            bottom: "10px",
-            width: "100%",
-            justifyContent: "center",
-          }}
-        >
-          <ActionIcon variant="transparent" size="lg">
-            <IconBrandInstagram size="1.2rem" stroke={2} />
-          </ActionIcon>
-          <ActionIcon variant="transparent" size="lg">
-            <IconBrandTwitter size="1.2rem" stroke={2} />
-          </ActionIcon>
-          <ActionIcon variant="transparent" size="lg">
-            <IconBrandYoutube size="1.2rem" stroke={2} />
-          </ActionIcon>
-          <ActionIcon variant="transparent" size="lg">
-            <IconMail size="1.2rem" stroke={2} />
-          </ActionIcon>
-        </Group>
-        {/* </Center> */}
-        {/* </Container> */}
+            <Center mt={15}>
+              <Image
+                onClick={() => setModelInView("home")}
+                sx={{ cursor: "pointer" }}
+                src={"/mindlogo.png"}
+                width={200}
+              />
+            </Center>
+            {/* <Center> */}
+            <Group
+              spacing={2}
+              position="center"
+              noWrap
+              sx={{
+                position: "fixed",
+                bottom: "10px",
+                width: "100%",
+                justifyContent: "center",
+              }}
+            >
+              <ActionIcon variant="transparent" size="lg">
+                <IconBrandInstagram size="1.2rem" stroke={2} />
+              </ActionIcon>
+              <ActionIcon variant="transparent" size="lg">
+                <IconBrandTwitter size="1.2rem" stroke={2} />
+              </ActionIcon>
+              <ActionIcon variant="transparent" size="lg">
+                <IconBrandYoutube size="1.2rem" stroke={2} />
+              </ActionIcon>
+              <ActionIcon variant="transparent" size="lg">
+                <IconMail size="1.2rem" stroke={2} />
+              </ActionIcon>
+            </Group>
+            {/* </Center> */}
+            {/* </Container> */}
+          </>
+        )}
 
         <Transition transition="pop-top-right" duration={200} mounted={opened}>
           {(styles) => (
@@ -293,59 +334,64 @@ function App() {
         </Transition>
       </Header>
 
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "10%",
-          transform: "translateY(-50%) rotate(-90deg)",
-        }}
-      >
-        <Text
-          onClick={() => setModelInView("shows")}
-          className={classes.transitions}
-          size={30}
-          // color="dimmed"
-          color={modelInView === "shows" ? "white" : "dimmed"}
-          sx={{
-            textAlign: "center",
-            padding: "10px",
-            fontFamily: "OffBit, sans-serif",
-            borderRadius: "5px",
-            textDecoration: modelInView === "shows" ? "underline" : "none",
-            transform: modelInView === "shows" ? "scale(1.05)" : "none",
-          }}
-        >
-          S H O W S
-        </Text>
-      </div>
+      {!isMobile && (
+        <>
+          {" "}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "10%",
+              transform: "translateY(-50%) rotate(-90deg)",
+            }}
+          >
+            <Text
+              onClick={() => setModelInView("shows")}
+              className={classes.transitions}
+              size={30}
+              // color="dimmed"
+              color={modelInView === "shows" ? "white" : "dimmed"}
+              sx={{
+                textAlign: "center",
+                padding: "10px",
+                fontFamily: "OffBit, sans-serif",
+                borderRadius: "5px",
+                textDecoration: modelInView === "shows" ? "underline" : "none",
+                transform: modelInView === "shows" ? "scale(1.05)" : "none",
+              }}
+            >
+              S H O W S
+            </Text>
+          </div>
+          {/* Right Text ("Merch") */}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              right: "10%",
+              transform: "translateY(-50%) rotate(90deg)",
+            }}
+          >
+            <Text
+              onClick={() => setModelInView("merch")}
+              className={classes.transitions}
+              size={30}
+              color={modelInView === "merch" ? "white" : "dimmed"}
+              sx={{
+                textAlign: "center",
+                padding: "10px",
+                fontFamily: "OffBit, sans-serif",
+                borderRadius: "5px",
+                textDecoration: modelInView === "merch" ? "underline" : "none",
+                transform: modelInView === "merch" ? "scale(1.05)" : "none",
+              }}
+            >
+              M E R C H
+            </Text>
+          </div>
+        </>
+      )}
 
-      {/* Right Text ("Merch") */}
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          right: "10%",
-          transform: "translateY(-50%) rotate(90deg)",
-        }}
-      >
-        <Text
-          onClick={() => setModelInView("merch")}
-          className={classes.transitions}
-          size={30}
-          color={modelInView === "merch" ? "white" : "dimmed"}
-          sx={{
-            textAlign: "center",
-            padding: "10px",
-            fontFamily: "OffBit, sans-serif",
-            borderRadius: "5px",
-            textDecoration: modelInView === "merch" ? "underline" : "none",
-            transform: modelInView === "merch" ? "scale(1.05)" : "none",
-          }}
-        >
-          M E R C H
-        </Text>
-      </div>
       {/* <Center> */}
       {/* <iframe
         style={{ position: "absolute", zIndex: 10 }}
