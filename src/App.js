@@ -111,7 +111,7 @@ const useStyles = createStyles((theme) => ({
 function App() {
   const links = [
     { label: "Home", link: "#home" },
-    { label: "About", link: "#about" },
+    // { label: "About", link: "#about" },
     { label: "Shows", link: "#shows" },
     { label: "Merch", link: "#merch" },
   ];
@@ -166,9 +166,9 @@ function App() {
             className={classes.burger}
           />
 
-          <Group className={classes.links} spacing={5}>
+          {/* <Group className={classes.links} spacing={5}>
             {items}
-          </Group>
+          </Group> */}
 
           <Image src={"/mindlogo.png"} width={200} />
           <Group spacing={2} className={classes.social} position="right" noWrap>
@@ -196,23 +196,8 @@ function App() {
           )}
         </Transition>
       </Header>
-      {/* <Center>
-        <Image
-          sx={{
-            position: "absolute",
-            zIndex: 1,
-            top: "5%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-          src={"/mindlogo.png"}
-          width={200}
-          // width={200}
-          // height={200}
-        />
-      </Center> */}
+
       <Mindchattter modelInView={modelInView} />
-      {/* </div> */}
     </>
   );
 }

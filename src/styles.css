@@ -31,7 +31,7 @@ body {
   font-family: 'Amiri', serif;
   color: white;
   background: black;
-  background: radial-gradient(circle at bottom center, rgba(60, 60, 60, 1) 0%, rgba(0, 0, 0, 1) 58%);
+  background: radial-gradient(circle at bottom center, rgba(60, 60, 60, 1) 0%, rgba(0, 0, 0, 1) 75%);
   /* cursor: url('https://github.com/chenglou/react-motion/raw/master/demos/demo8-draggable-list/cursor.png') 39 39, auto; */
   /* cursor: url('https://public.blenderkit.com/thumbnails/assets/082c7417bca0408b918e4ef85061f9a9/files/thumbnail_8ef673c2-d99d-4523-bcb9-35991d2c25d6.png.256x256_q85_crop-%2C.png') 39 39, auto; */
   font-family: inter;
@@ -49,7 +49,7 @@ body {
 canvas {
   opacity: 0;
   touch-action: none;
-  animation: fade-in 2s ease 0s forwards;
+  animation: fade-in 1s ease 0s forwards;
 }
 
 .annotation {
@@ -60,7 +60,7 @@ canvas {
   border: none;
   font-size: 8px;
   font-weight: 300;
-  background: indianred;
+  background: rgb(88, 88, 88);
   color: white;
   padding: 2px 10px;
   border-radius: 20px;
