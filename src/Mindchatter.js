@@ -215,8 +215,8 @@ function Model(props) {
 
     <group ref={group} {...props} dispose={null}>
       <mesh
-        position={[0, 0, 0]}
-        scale={2.2}
+        position={[0.5, -0.5, 0]}
+        scale={2.4}
         ref={meshRef}
         castShadow
         receiveShadow
