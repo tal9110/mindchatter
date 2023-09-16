@@ -1,6 +1,6 @@
 import React from "react";
 import Mindchattter from "./Mindchatter";
-import { Center, Image, Text } from "@mantine/core";
+import { Center, Image, Stack, Text } from "@mantine/core";
 import {
   createStyles,
   Header,
@@ -20,7 +20,7 @@ import {
 import { useState } from "react";
 import { Paper, Transition } from "@mantine/core";
 import { useEffect } from "react";
-
+import { Modal } from "@mantine/core";
 import { isMobile } from "react-device-detect";
 
 const HEADER_HEIGHT = rem(60);
@@ -182,6 +182,8 @@ function MyComponent(props) {
 }
 
 function App() {
+  // const [opened2, { open, close }] = useDisclosure(false);
+
   const links = [
     { label: "Home", link: "#home" },
     // { label: "About", link: "#about" },
@@ -214,6 +216,35 @@ function App() {
   ));
 
   const [modelInView, setModelInView] = useState("first");
+
+  const [emailOpacity, setEmailOpacity] = React.useState(0); // set opacity to 0 by default
+
+  useEffect(() => {
+    if (modelInView === "contact") {
+      setEmailOpacity(1); // set opacity to 1 when modelInView is "contact"
+    } else {
+      setEmailOpacity(0); // set opacity back to 0 for other values
+    }
+  }, [modelInView]);
+
+  function handleInstagramClick() {
+    window.open("https://www.instagram.com/mindchatter_/", "_blank");
+  }
+
+  function handleTwitterClick() {
+    window.open("https://twitter.com/mindchatter_", "_blank");
+  }
+
+  function handleYoutubeClick() {
+    window.open(
+      "https://www.youtube.com/channel/UCvV7kIAoUiG25V5cfr7-xfA",
+      "_blank"
+    );
+  }
+
+  function handleEmailClick() {
+    window.open("mailto:mindchattermusic@gmail.com", "_blank");
+  }
 
   return (
     <>
@@ -271,7 +302,12 @@ function App() {
           </>
         ) : (
           <>
-            {" "}
+            {/* <Modal
+              opened={opened2}
+              onClose={close}
+              // title="Contact"
+              centered
+            ></Modal> */}
             {/* <Container className={classes.inner} style={{ maxWidth: "100%" }}>
           <Burger
             color="white"
@@ -291,11 +327,127 @@ function App() {
                 width={200}
               />
             </Center>
+            {modelInView === "contact" && (
+              <Container
+                style={{
+                  opacity: emailOpacity,
+                  transition: "opacity 1.5s ease-in-out",
+                }}
+              >
+                <Stack pt={15} spacing={5}>
+                  <Text
+                    cursor="pointer"
+                    color="dimmed"
+                    size={25}
+                    sx={{
+                      letterSpacing: "1.5px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      textAlign: "center",
+                      padding: "10px",
+                      fontFamily: "OffBit, sans-serif",
+                      // background: "#f5f5f5",
+                      borderRadius: "5px",
+                      border: "1px solid #e0e0e0",
+                      fontStyle: "italic",
+                      "::before": {
+                        content: '"Contact:"',
+                        fontStyle: "normal",
+                        fontWeight: "bold",
+                        color: "white",
+                      },
+                    }}
+                  >
+                    <a
+                      href="mailto:mindchattermusic@gmail.com"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      mindchattermusic@gmail.com
+                    </a>{" "}
+                  </Text>
+                  <Text
+                    cursor="pointer"
+                    color="dimmed"
+                    size={25}
+                    sx={{
+                      letterSpacing: "1.5px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      textAlign: "center",
+                      padding: "10px",
+                      fontFamily: "OffBit, sans-serif",
+                      // background: "#f5f5f5",
+                      borderRadius: "5px",
+                      border: "1px solid #e0e0e0",
+                      fontStyle: "italic",
+                      "::before": {
+                        content: '"Management:"',
+                        fontStyle: "normal",
+                        fontWeight: "bold",
+                        color: "white",
+                      },
+                    }}
+                  >
+                    <a
+                      href="mailto:andrew@night-tones.com"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      andrew@night-tones.com
+                    </a>
+                    /
+                    <a
+                      href="mailto:connor@night-tones.com"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      connor@night-tones.com
+                    </a>{" "}
+                  </Text>
+                  <Text
+                    cursor="pointer"
+                    color="dimmed"
+                    size={25}
+                    sx={{
+                      letterSpacing: "1.5px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      textAlign: "center",
+                      padding: "10px",
+                      fontFamily: "OffBit, sans-serif",
+                      // background: "#f5f5f5",
+                      borderRadius: "5px",
+                      border: "1px solid #e0e0e0",
+                      fontStyle: "italic",
+                      "::before": {
+                        content: '"Bookings:"',
+                        fontStyle: "normal",
+                        fontWeight: "bold",
+                        color: "white",
+                      },
+                    }}
+                  >
+                    <a
+                      href="mailto:jmoss@teamwass.com"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      jmoss@teamwass.com
+                    </a>
+                    /
+                    <a
+                      href="mailto:lchenfeld@night-tones.com"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      lchenfeld@night-tones.com
+                    </a>{" "}
+                  </Text>
+                </Stack>
+              </Container>
+            )}
+
             {/* <Center> */}
-            <Group
-              spacing={2}
-              position="center"
-              noWrap
+            <Stack
+              align="stretch"
+              justify="center"
+              spacing="xs"
               sx={{
                 position: "fixed",
                 bottom: "10px",
@@ -303,19 +455,59 @@ function App() {
                 justifyContent: "center",
               }}
             >
-              <ActionIcon variant="transparent" size="lg">
-                <IconBrandInstagram size="1.2rem" stroke={2} />
-              </ActionIcon>
-              <ActionIcon variant="transparent" size="lg">
-                <IconBrandTwitter size="1.2rem" stroke={2} />
-              </ActionIcon>
-              <ActionIcon variant="transparent" size="lg">
-                <IconBrandYoutube size="1.2rem" stroke={2} />
-              </ActionIcon>
-              <ActionIcon variant="transparent" size="lg">
-                <IconMail size="1.2rem" stroke={2} />
-              </ActionIcon>
-            </Group>
+              <Group spacing={2} position="center" noWrap>
+                <ActionIcon
+                  variant="transparent"
+                  size="lg"
+                  onClick={handleInstagramClick}
+                >
+                  <IconBrandInstagram size="1.1rem" stroke={2} />
+                </ActionIcon>
+                <ActionIcon
+                  variant="transparent"
+                  size="lg"
+                  onClick={handleTwitterClick}
+                >
+                  <IconBrandTwitter size="1.1rem" stroke={2} />
+                </ActionIcon>
+                <ActionIcon
+                  variant="transparent"
+                  size="lg"
+                  onClick={handleYoutubeClick}
+                >
+                  <IconBrandYoutube size="1.1rem" stroke={2} />
+                </ActionIcon>
+                <ActionIcon
+                  variant="transparent"
+                  size="lg"
+                  onClick={handleEmailClick}
+                >
+                  <IconMail size="1.1rem" stroke={2} />
+                </ActionIcon>
+              </Group>
+              <Center>
+                <Text
+                  size={17}
+                  // size={"sm"}
+                  // color="white"
+                  // onClick={open}
+                  onClick={() => setModelInView("contact")}
+                  color="dimmed"
+                  sx={{
+                    textAlign: "center",
+                    // padding: "10px",
+                    cursor: "pointer",
+                    fontFamily: "OffBit, sans-serif",
+                    borderRadius: "5px",
+                    textDecoration:
+                      modelInView === "shows" ? "underline" : "none",
+                    transform: modelInView === "shows" ? "scale(1.05)" : "none",
+                  }}
+                >
+                  C O N T A C T
+                </Text>
+              </Center>
+            </Stack>
             {/* </Center> */}
             {/* </Container> */}
           </>
@@ -391,19 +583,6 @@ function App() {
           </div>
         </>
       )}
-
-      {/* <Center> */}
-      {/* <iframe
-        style={{ position: "absolute", zIndex: 10 }}
-        src="https://laylo.com/mindchatter_/m/Se3SH"
-        width="50%"
-        height="580"
-        frameborder="0"
-        scrolling="no"
-        allowtransparency="true"
-      ></iframe> */}
-
-      {/* </Center> */}
 
       <Mindchattter modelInView={modelInView} />
     </>

@@ -1,11 +1,17 @@
-// Original concept by Tom Bogner @dastom on Dribble: https://dribbble.com/shots/6767548-The-Three-Graces-Concept
-
 import { useEffect, useRef } from "react";
 import { Canvas, extend, useFrame } from "@react-three/fiber";
-import { useGLTF, SoftShadows, Html, CameraControls } from "@react-three/drei";
+import {
+  useGLTF,
+  SoftShadows,
+  Html,
+  CameraControls,
+  Decal,
+} from "@react-three/drei";
 import { easing, geometry } from "maath";
 import gsap from "gsap";
 import { Mesh } from "three";
+import { useTexture } from "@react-three/drei";
+import * as THREE from "three";
 
 extend(geometry);
 
@@ -55,10 +61,14 @@ export default function Mindchatter({ modelInView }) {
       camera={{ position: [0, 1.5, 14], fov: 45 }}
     >
       <fog attach="fog" args={["black", 0, 20]} />
+      {/* <ambientLight intensity={modelInView === "contact" ? 10 : 4} /> */}
       <ambientLight intensity={4} />
+
       <pointLight position={[10, -10, -20]} intensity={150} />
       <pointLight position={[-10, -10, -20]} intensity={150} />
       {/* <Model position={[0, -5.5, 3]} rotation={[0, 0, 0]} /> */}
+
+      <Eye inView={modelInView} />
       <group ref={firstGroup}>
         <Model
           inView={modelInView === "first"}
@@ -69,7 +79,7 @@ export default function Mindchatter({ modelInView }) {
         />
       </group>
       <group ref={secondGroup}>
-        <group position={[-1.5, 0.65, -3]}>
+        {/* <group position={[-1.5, 0.65, -3]}>
           <Model2
             num={1}
             inView={modelInView === "second"}
@@ -110,7 +120,16 @@ export default function Mindchatter({ modelInView }) {
             inView={modelInView === "second"}
             rotation={[0, 0, 0]}
           />
+        </group> */}
+        <group position={[-1.5, 0, -3]}>
+          <Model2
+            num={6}
+            inView={modelInView === "second"}
+            rotation={[0, 0, 0]}
+          />
         </group>
+        <Hoodie />
+        <Vinyl />
       </group>
       <SoftShadows samples={3} />
       <CameraControls
@@ -132,7 +151,11 @@ function Model(props) {
   const meshRef = useRef();
 
   useEffect(() => {
-    if (props.inView2 === "merch" || props.inView2 === "shows") {
+    if (
+      props.inView2 === "merch" ||
+      props.inView2 === "shows" ||
+      props.inView2 === "contact"
+    ) {
       gsap.to(meshRef.current?.material, {
         duration: 1,
         opacity: 0,
@@ -182,40 +205,9 @@ function Model(props) {
     // }
   });
   return (
-    // <group ref={group} {...props} dispose={null}>
-    //   <mesh
-    //     ref={meshRef}
-    //     scale={0.75}
-    //     castShadow
-    //     receiveShadow
-    //     geometry={nodes.bust.geometry}
-    //     material={materials.bust}
-    //     position={[4.681, 1.981, 7.974]}
-    //     rotation={[Math.PI / 2, 0, 0]}
-    //   >
-    //     <meshLambertMaterial color="#404044" />
-    //   </mesh>
-    //   <spotLight
-    //     // angle={0.5}
-    //     // penumbra={0.5}
-    //     ref={light}
-    //     castShadow
-    //     intensity={1000}
-    //     // shadow-mapSize={1024}
-    //     // shadow-bias={-0.001}
-    //   >
-    //     <orthographicCamera
-    //       attach="shadow-camera"
-    //       args={[-10, 10, -10, 10, 0.1, 50]}
-    //     />
-    //   </spotLight>
-    //   {/* <Annotation position={[3.5, 3, -1]}>Shows</Annotation>
-    //   <Annotation position={[-3, 5, 1]}>Merch</Annotation> */}
-    // </group>
-
     <group ref={group} {...props} dispose={null}>
       <mesh
-        position={[0.5, -0.5, 0]}
+        position={[0.5, -0.4, 0]}
         scale={2.4}
         ref={meshRef}
         castShadow
@@ -244,30 +236,185 @@ function Model(props) {
   );
 }
 
+// function Hoodie(props) {
+//   const { nodes, materials } = useGLTF("/mindchatterHoodie2.glb");
+//   return (
+//     <group scale={0.05} position={[0, 3, 1]} {...props} dispose={null}>
+//       <mesh
+//         castShadow
+//         receiveShadow
+//         geometry={nodes.Hoodie.geometry}
+//         // material={materials.FABRIC_1_FRONT_2578}
+//         position={[0, -98.397, 0]}
+//         rotation={[Math.PI / 2, 0, 0]}
+//       >
+//         <meshLambertMaterial color="#404044" />
+
+//         {/* <Decal
+//           // debug
+//           position={[0, 1.42, 0.15]}
+//           rotation={[0, 0, 0]}
+//           scale={0.2}
+//           map={texture}
+//           // map-anisotropy={16}
+//         /> */}
+//       </mesh>
+//     </group>
+//   );
+// }
+
+function Hoodie(props) {
+  const { nodes, materials } = useGLTF("/mindchatterHoodie.glb");
+  const groupRef = useRef();
+  useFrame((state, delta) => {
+    easing.dampE(
+      groupRef.current.rotation,
+      [0, state.pointer.x * (Math.PI / 3) + Math.PI, 0],
+      0.9,
+      delta
+    );
+    // }
+  });
+  const texture = useTexture("/hoodie.png");
+  return (
+    <group
+      ref={groupRef}
+      scale={0.8}
+      rotation={[0, Math.PI, 0]}
+      position={[0.9, 6.3, 10]}
+      {...props}
+      dispose={null}
+    >
+      <group position={[0, -0.839, 0]}>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cloth_mesh.geometry}
+          // material={materials["Force Fleece_FRONT_134561"]}
+        >
+          <meshLambertMaterial color="#A89C81" />
+          <Decal
+            // debug
+            position={[0, 1.35, -0.35]}
+            rotation={[0, 0, 0]}
+            scale={0.5}
+            map={texture}
+            polygonOffset
+            polygonOffsetFactor={2} // The mesh should take precedence over the original
+
+            // map-anisotropy={16}
+          />
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cloth_mesh_1.geometry}
+          // material={materials["2x2 Rib_FRONT_134483"]}
+        >
+          <meshLambertMaterial color="#A89C81" />
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cloth_mesh_2.geometry}
+          // material={materials.Fabric374733_FRONT_76578}
+        >
+          <meshLambertMaterial color="#A89C81" />
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cloth_mesh_3.geometry}
+          // material={materials.Fabric374733_SIDE_76578}
+        >
+          <meshLambertMaterial color="#A89C81" />
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cloth_mesh_4.geometry}
+          // material={materials["Fabric374733_FRONT_76578.001"]}
+        >
+          <meshLambertMaterial color="#A89C81" />
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cloth_mesh_5.geometry}
+          // material={materials["Fabric374733_SIDE_76578.001"]}
+        >
+          <meshLambertMaterial color="#A89C81" />
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes._mesh004.geometry}
+          // material={materials.Material94287}
+          position={[0.008, 0.967, 0.188]}
+          rotation={[0.044, -0.223, 0.026]}
+        >
+          <meshLambertMaterial color="#A89C81" />
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes._mesh005.geometry}
+          // material={materials.Material94287}
+          position={[0.008, 0.967, 0.188]}
+          rotation={[0.046, -0.127, -0.076]}
+        >
+          <meshLambertMaterial color="#A89C81" />
+        </mesh>
+      </group>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes._mesh.geometry}
+        // material={materials.Material94283}
+      >
+        <meshLambertMaterial color="#A89C81" />
+      </mesh>
+    </group>
+  );
+}
+
 function Model2(props) {
   const { nodes, materials } = useGLTF("/merch.glb");
   const group = useRef();
   const light = useRef();
   useFrame((state, delta) => {
-    if (props.num % 2 === 0) {
-      group.current.rotation.y += delta * 0.3;
-    }
-    if (props.num % 2 !== 0) {
-      group.current.rotation.y -= delta * 0.3;
-    }
-    // if (props.inView) {
-    //   easing.dampE(
-    //     group.current.rotation,
-    //     [0, -state.pointer.x * (Math.PI / 9), 0],
-    //     1.5,
+    easing.dampE(
+      group.current.rotation,
+      [0, -state.pointer.x * (Math.PI / 3), 0],
+      0.9,
+      delta
+    );
+    //   easing.damp3(
+    //     group.current.position,
+    //     [0, -5.5, 1 - Math.abs(state.pointer.x)],
+    //     1,
     //     delta
     //   );
-    //   //   easing.damp3(
-    //   //     group.current.position,
-    //   //     [0, -5.5, 1 - Math.abs(state.pointer.x)],
-    //   //     1,
-    //   //     delta
-    //   //   );
+    // if (props.num % 2 === 0) {
+    //   group.current.rotation.y += delta * 0.3;
+    // }
+    // if (props.num % 2 !== 0) {
+    //   group.current.rotation.y -= delta * 0.3;
+    // }
+
+    // if (props.inView) {
+    // easing.dampE(
+    //   group.current.rotation,
+    //   [0, -state.pointer.x * (Math.PI / 9), 0],
+    //   1.5,
+    //   delta
+    // );
+    // //   easing.damp3(
+    // //     group.current.position,
+    // //     [0, -5.5, 1 - Math.abs(state.pointer.x)],
+    // //     1,
+    // //     delta
+    // //   );
     // }
 
     easing.damp3(
@@ -278,6 +425,9 @@ function Model2(props) {
     );
     // }
   });
+
+  const texture = useTexture("/tee.png");
+
   return (
     <group
       scale={2}
@@ -292,8 +442,7 @@ function Model2(props) {
         geometry={nodes.Body_Back_Node.geometry}
         material={materials.Body_FRONT_2664}
       >
-        {" "}
-        <meshLambertMaterial color="#404044" />
+        <meshLambertMaterial color="#cfcfcf" />
       </mesh>
       <mesh
         castShadow
@@ -301,8 +450,16 @@ function Model2(props) {
         geometry={nodes.Body_Front_Node.geometry}
         material={materials.Body_FRONT_2664}
       >
-        {" "}
-        <meshLambertMaterial color="#404044" />
+        <meshLambertMaterial color="#cfcfcf" />
+
+        <Decal
+          // debug
+          position={[0, 1.42, 0.15]}
+          rotation={[0, 0, 0]}
+          scale={0.2}
+          map={texture}
+          // map-anisotropy={16}
+        />
       </mesh>
       <mesh
         castShadow
@@ -310,8 +467,7 @@ function Model2(props) {
         geometry={nodes.Ribbing_Node.geometry}
         material={materials.Body_FRONT_2664}
       >
-        {" "}
-        <meshLambertMaterial color="#404044" />
+        <meshLambertMaterial color="#cfcfcf" />
       </mesh>
       <mesh
         castShadow
@@ -319,8 +475,7 @@ function Model2(props) {
         geometry={nodes.Ribbing_Node001.geometry}
         material={materials.Body_FRONT_2664}
       >
-        {" "}
-        <meshLambertMaterial color="#404044" />
+        <meshLambertMaterial color="#cfcfcf" />
       </mesh>
       <mesh
         castShadow
@@ -328,8 +483,7 @@ function Model2(props) {
         geometry={nodes.Sleeves_Node.geometry}
         material={materials.Sleeves_FRONT_2669}
       >
-        {" "}
-        <meshLambertMaterial color="#404044" />
+        <meshLambertMaterial color="#cfcfcf" />
       </mesh>
       <mesh
         castShadow
@@ -337,8 +491,7 @@ function Model2(props) {
         geometry={nodes.Sleeves_Node001.geometry}
         material={materials.Sleeves_FRONT_2669}
       >
-        {" "}
-        <meshLambertMaterial color="#404044" />
+        <meshLambertMaterial color="#cfcfcf" />
       </mesh>
       <spotLight
         // angle={0.5}
@@ -358,20 +511,487 @@ function Model2(props) {
   );
 }
 
-function Annotation({ children, ...props }) {
+function Eye(props) {
+  const { nodes, materials } = useGLTF("/Eye.gltf");
+
+  const eyeRef1 = useRef();
+  const eyeRef2 = useRef();
+  const totalRef = useRef();
+
+  useEffect(() => {
+    if (props.inView !== "contact") {
+      gsap.to(totalRef.current.position, {
+        duration: 1,
+        x: 0,
+        y: -5,
+        z: 0,
+        ease: "power1.inOut",
+      });
+    }
+    if (props.inView === "contact") {
+      gsap.to(totalRef.current.position, {
+        duration: 1,
+        x: -0.75,
+        y: 1,
+        z: 2,
+        ease: "power1.inOut",
+      });
+    }
+    if (props.inView !== "contact") {
+      gsap.to(totalRef.current.scale, {
+        duration: 1,
+        x: 0,
+        y: 0,
+        z: 0,
+        ease: "power1.inOut",
+      });
+    }
+    if (props.inView === "contact") {
+      gsap.to(totalRef.current.scale, {
+        duration: 1,
+        x: 0.5,
+        y: 0.5,
+        z: 0.5,
+        ease: "power1.inOut",
+      });
+    }
+  }, [props.inView]);
+
+  useFrame((state, delta) => {
+    if (props.inView === "contact") {
+      const targetRotationX = -state.pointer.y * (Math.PI / 6); // up to 30 degrees vertical rotation
+      const targetRotationZ = state.pointer.x * (Math.PI / 6); // up to 30 degrees horizontal rotation
+
+      easing.dampE(
+        eyeRef1.current.rotation,
+        [targetRotationX, 0, targetRotationZ],
+        0.1,
+        delta
+      );
+      easing.dampE(
+        eyeRef2.current.rotation,
+        [targetRotationX, 0, targetRotationZ],
+        0.1,
+        delta
+      );
+    }
+  });
   return (
-    <Html
+    <group
       {...props}
-      transform
-      occlude="blending"
-      geometry={
-        /** The geometry is optional, it allows you to use any shape.
-         *  By default it would be a plane. We need round edges here ...
-         */
-        <roundedPlaneGeometry args={[1.66, 0.47, 0.24]} />
-      }
+      dispose={null}
+      scale={0}
+      rotation-y={Math.PI / 2}
+      ref={totalRef}
+      position={[-0.75, 1, 2]}
     >
-      <div className="annotation">{children}</div>
-    </Html>
+      <group>
+        <group
+          position={[-1.016, 0.362, 2.767]}
+          rotation={[-1.231, 0.165, -1.708]}
+          scale={4}
+        >
+          <group ref={eyeRef1}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Sclera.geometry}
+              material={materials.Eye}
+              position={[0, -0.102, 0]}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Shell.geometry}
+            material={materials["Eye 2"]}
+            position={[0, 0, -0.36]}
+          />
+        </group>
+        <group
+          position={[-1.016, 0.362, -0.072]}
+          rotation={[-1.231, 0.165, -1.708]}
+          scale={4}
+        >
+          <group ref={eyeRef2}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Sclera_1.geometry}
+              material={materials.Eye}
+              position={[0, -0.102, 0]}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Shell_1.geometry}
+            material={materials["Eye 2"]}
+            position={[0, 0, -0.36]}
+          />
+        </group>
+      </group>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.ztl_fist_v2.geometry}
+        material={materials.Hand}
+        position={[0, -15.597, 2.722]}
+        rotation={[-Math.PI / 2, -0.175, -Math.PI / 2]}
+        scale={20}
+      />
+    </group>
+  );
+}
+
+function Vinyl(props) {
+  const { nodes, materials } = useGLTF("/vinyl.glb");
+  const diskRef = useRef();
+
+  useFrame((state, delta) => {
+    diskRef.current.rotation.y += delta;
+  });
+  return (
+    <group
+      scale={0.9}
+      rotation={[Math.PI / 2, -Math.PI / 2, 0]}
+      position={[0.8, 6, 2]}
+      {...props}
+      dispose={null}
+    >
+      <group ref={diskRef}>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle.geometry}
+          // material={materials["Material.001"]}
+          position={[0, -0.002, 0]}
+          scale={0.89}
+        >
+          {/* <meshStandardMaterial color="gray" /> */}
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle002.geometry}
+          material={materials["Material.002"]}
+          position={[0, 0.006, 0]}
+          scale={0.879}
+        >
+          {/* <meshStandardMaterial color="gray" /> */}
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle003.geometry}
+          material={materials["Material.002"]}
+          position={[0, 0.006, 0]}
+          scale={0.777}
+        >
+          {/* <meshStandardMaterial color="gray" /> */}
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle004.geometry}
+          material={materials["Material.002"]}
+          position={[0, 0.006, 0]}
+          scale={0.699}
+        >
+          {/* <meshStandardMaterial color="gray" /> */}
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle005.geometry}
+          material={materials["Material.002"]}
+          position={[0, 0.006, 0]}
+          scale={0.645}
+        >
+          {/* <meshStandardMaterial color="gray" /> */}
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle006.geometry}
+          material={materials["Material.003"]}
+          position={[0, 0, 0.001]}
+          scale={0.991}
+        >
+          {/* <meshStandardMaterial color="gray" /> */}
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle007.geometry}
+          material={materials["Material.004"]}
+          position={[0, -0.005, 0.001]}
+          scale={1.069}
+        >
+          {/* <meshStandardMaterial color="gray" /> */}
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle008.geometry}
+          material={materials["Material.004"]}
+          position={[0, -0.012, 0.001]}
+          scale={2.117}
+        >
+          {/* <meshStandardMaterial color="gray" /> */}
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Text.geometry}
+          material={materials["Material.004"]}
+          position={[0, 0.015, 0.024]}
+          scale={0.096}
+        >
+          <meshStandardMaterial color="gray" />
+        </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.z.geometry}
+          material={materials["Material.004"]}
+          position={[0.218, 0.015, 0.685]}
+          rotation={[-Math.PI, 0, 0]}
+          scale={0.096}
+        >
+          <meshStandardMaterial color="gray" />
+        </mesh>
+      </group>
+
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Circle001.geometry}
+        material={materials["Material.002"]}
+        position={[0, -0.004, 0]}
+        scale={0.879}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Circle009.geometry}
+        material={materials["Material.002"]}
+        position={[0, -0.011, 0]}
+        scale={0.777}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Circle010.geometry}
+        material={materials["Material.002"]}
+        position={[0, -0.011, 0]}
+        scale={0.699}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Circle011.geometry}
+        material={materials["Material.002"]}
+        position={[0, -0.011, 0]}
+        scale={0.645}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Circle012.geometry}
+        material={materials["Material.002"]}
+        position={[0, -0.012, 0]}
+        scale={0.879}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.z001.geometry}
+        material={materials["Material.004"]}
+        position={[-0.327, 0.015, 0.694]}
+        rotation={[-Math.PI, 0, 0]}
+        scale={0.102}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.z002.geometry}
+        material={materials["Material.004"]}
+        position={[0.613, 0.015, 0.704]}
+        rotation={[-Math.PI, 0, 0]}
+        scale={0.112}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.z003.geometry}
+        material={materials["Material.004"]}
+        position={[-0.327, 0.007, 0.623]}
+        rotation={[-Math.PI, 0, 0]}
+        scale={0.059}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Circle013.geometry}
+        material={materials["Material.003"]}
+        position={[0, -0.005, 0.005]}
+        rotation={[-Math.PI, 0, 0]}
+        scale={0.991}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Circle014.geometry}
+        material={materials["Material.004"]}
+        position={[0, 0, 0.005]}
+        rotation={[-Math.PI, 0, 0]}
+        scale={1.069}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Circle015.geometry}
+        material={materials["Material.004"]}
+        position={[0, 0.007, 0.005]}
+        rotation={[-Math.PI, 0, 0]}
+        scale={2.117}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Text001.geometry}
+        material={materials["Material.004"]}
+        position={[0, -0.02, -0.017]}
+        rotation={[-Math.PI, 0, 0]}
+        scale={0.096}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.z004.geometry}
+        material={materials["Material.004"]}
+        position={[0.218, -0.036, -0.678]}
+        scale={0.096}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.z005.geometry}
+        material={materials["Material.004"]}
+        position={[-0.327, -0.036, -0.687]}
+        scale={0.102}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.z006.geometry}
+        material={materials["Material.004"]}
+        position={[0.613, -0.02, -0.697]}
+        scale={0.112}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.z007.geometry}
+        material={materials["Material.004"]}
+        position={[-0.327, -0.012, -0.616]}
+        scale={0.059}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Plane.geometry}
+        material={materials["Material.003"]}
+        position={[0, -0.032, 0.95]}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Text002.geometry}
+        material={materials["Material.004"]}
+        position={[0.585, -0.022, 0]}
+        rotation={[0, -Math.PI / 2, 0]}
+        scale={[0.47, 0.494, 0.494]}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Text003.geometry}
+        material={materials["Material.004"]}
+        position={[0.241, -0.022, 0]}
+        rotation={[0, -Math.PI / 2, 0]}
+        scale={[0.47, 0.494, 0.494]}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Text004.geometry}
+        material={materials["Material.004"]}
+        position={[-0.061, -0.022, 0]}
+        rotation={[0, -Math.PI / 2, 0]}
+        scale={[0.47, 0.494, 0.494]}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Plane001.geometry}
+        material={materials["Material.004"]}
+        position={[-1.128, -0.026, 0.95]}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Text005.geometry}
+        material={materials["Material.004"]}
+        position={[-0.909, -0.022, 0]}
+        rotation={[0, -Math.PI / 2, 0]}
+        scale={0.494}
+      >
+        <meshStandardMaterial color="gray" />
+      </mesh>
+    </group>
   );
 }
