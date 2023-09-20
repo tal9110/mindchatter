@@ -426,17 +426,17 @@ function App() {
                     }}
                   >
                     <a
-                      href="mailto:jmoss@teamwass.com"
+                      href="mailto:mjmoss@teamwass.co"
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
                       jmoss@teamwass.com
                     </a>
                     /
                     <a
-                      href="mailto:lchenfeld@night-tones.com"
+                      href="mailto:lchenfeld@teamwass.com"
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
-                      lchenfeld@night-tones.com
+                      lchenfeld@teamwass.com{" "}
                     </a>{" "}
                   </Text>
                 </Stack>
