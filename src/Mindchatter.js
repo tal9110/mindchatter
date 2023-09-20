@@ -151,6 +151,7 @@ function Model(props) {
   const meshRef = useRef();
 
   useEffect(() => {
+    console.log(meshRef.current);
     if (
       props.inView2 === "merch" ||
       props.inView2 === "shows" ||
@@ -216,7 +217,9 @@ function Model(props) {
         material={materials.Mat}
         rotation={[0, -Math.PI / 2.5, 0]}
       >
-        <meshLambertMaterial color="#404044" />
+        {/* <meshLambertMaterial color="#404044" /> */}
+        <meshLambertMaterial color="#6a6a6b" />
+
         <spotLight
           // angle={0.5}
           // penumbra={0.5}
