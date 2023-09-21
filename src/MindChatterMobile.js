@@ -20,6 +20,10 @@ export default function Mindchatter({ modelInView }) {
   const secondGroup = useRef();
 
   useEffect(() => {
+    console.log(modelInView);
+  }, [modelInView]);
+
+  useEffect(() => {
     if (modelInView !== "merch") {
       gsap.to(firstGroup.current?.position, {
         duration: 2,
@@ -68,7 +72,9 @@ export default function Mindchatter({ modelInView }) {
       <pointLight position={[-10, -10, -20]} intensity={150} />
       {/* <Model position={[0, -5.5, 3]} rotation={[0, 0, 0]} /> */}
 
-      <Eye inView={modelInView} />
+      <group scale={0.75} position={[0, -2.5, 0]}>
+        <Eye inView={modelInView} />
+      </group>
       <group ref={firstGroup}>
         <Model
           inView={modelInView === "first"}
@@ -121,15 +127,19 @@ export default function Mindchatter({ modelInView }) {
             rotation={[0, 0, 0]}
           />
         </group> */}
-        <group position={[-1.5, 0, -3]}>
+        <group position={[-0.9, 0, -4]}>
           <Model2
             num={6}
             inView={modelInView === "second"}
             rotation={[0, 0, 0]}
           />
         </group>
-        <Hoodie />
-        <Vinyl modelInView={modelInView} />
+        <group position={[-0.3, 0, -1]}>
+          <Hoodie />
+        </group>
+        <group position={[0, -2.5, 0]} rotation={[0, 0, 0]}>
+          <Vinyl modelInView={modelInView} />
+        </group>
       </group>
       <SoftShadows samples={3} />
       <CameraControls
@@ -242,30 +252,35 @@ function Model(props) {
 function Hoodie(props) {
   const { nodes, materials } = useGLTF("/hoodieSmaller.glb");
   const groupRef = useRef();
+  let time = 0;
   useFrame((state, delta) => {
-    easing.dampE(
-      groupRef.current.rotation,
-      [0, state.pointer.x * (Math.PI / 3) + Math.PI, 0],
-      0.9,
-      delta
-    );
+    time += delta;
+
+    groupRef.current.rotation.y =
+      (Math.sin(time * 0.3) * Math.PI) / -4 + Math.PI;
+    // easing.dampE(
+    //   groupRef.current.rotation,
+    //   [0, state.pointer.x * (Math.PI / 3) + Math.PI, 0],
+    //   0.9,
+    //   delta
+    // );
     // }
   });
   const texture = useTexture("/hoodie.png");
   return (
     <group
-      onClick={() => {
-        window.open(
-          "https://mindchattermerch.com/products/mc-live-on-tour-hoodie",
-          "_blank"
-        );
-      }}
       ref={groupRef}
       scale={0.8}
       rotation={[0, Math.PI, 0]}
       position={[0.9, 6.3, 10]}
       {...props}
       dispose={null}
+      onClick={() => {
+        window.open(
+          "https://mindchattermerch.com/products/mc-live-on-tour-hoodie",
+          "_blank"
+        );
+      }}
     >
       {/* <group position={[0, -0.839, 0]}>
         <mesh
@@ -426,49 +441,55 @@ function Model2(props) {
   const { nodes, materials } = useGLTF("/merch.glb");
   const group = useRef();
   const light = useRef();
+  let time = 0;
   useFrame((state, delta) => {
-    easing.dampE(
-      group.current.rotation,
-      [0, -state.pointer.x * (Math.PI / 3), 0],
-      0.9,
-      delta
-    );
-    //   easing.damp3(
-    //     group.current.position,
-    //     [0, -5.5, 1 - Math.abs(state.pointer.x)],
-    //     1,
-    //     delta
-    //   );
-    // if (props.num % 2 === 0) {
-    //   group.current.rotation.y += delta * 0.3;
-    // }
-    // if (props.num % 2 !== 0) {
-    //   group.current.rotation.y -= delta * 0.3;
-    // }
+    time += delta;
 
-    // if (props.inView) {
+    group.current.rotation.y = (Math.sin(time * 0.3) * -Math.PI) / -4;
     // easing.dampE(
-    //   group.current.rotation,
-    //   [0, -state.pointer.x * (Math.PI / 9), 0],
-    //   1.5,
+    //   groupRef.current.rotation,
+    //   [0, state.pointer.x * (Math.PI / 3) + Math.PI, 0],
+    //   0.9,
     //   delta
     // );
-    // //   easing.damp3(
-    // //     group.current.position,
-    // //     [0, -5.5, 1 - Math.abs(state.pointer.x)],
-    // //     1,
-    // //     delta
-    // //   );
-    // }
-
-    easing.damp3(
-      light.current.position,
-      [state.pointer.x * 12, 0, 8 + state.pointer.y * 4],
-      0.2,
-      delta
-    );
     // }
   });
+  //   easing.damp3(
+  //     group.current.position,
+  //     [0, -5.5, 1 - Math.abs(state.pointer.x)],
+  //     1,
+  //     delta
+  //   );
+  // if (props.num % 2 === 0) {
+  //   group.current.rotation.y += delta * 0.3;
+  // }
+  // if (props.num % 2 !== 0) {
+  //   group.current.rotation.y -= delta * 0.3;
+  // }
+
+  // if (props.inView) {
+  // easing.dampE(
+  //   group.current.rotation,
+  //   [0, -state.pointer.x * (Math.PI / 9), 0],
+  //   1.5,
+  //   delta
+  // );
+  // //   easing.damp3(
+  // //     group.current.position,
+  // //     [0, -5.5, 1 - Math.abs(state.pointer.x)],
+  // //     1,
+  // //     delta
+  // //   );
+  // }
+
+  //     easing.damp3(
+  //       light.current.position,
+  //       [state.pointer.x * 12, 0, 8 + state.pointer.y * 4],
+  //       0.2,
+  //       delta
+  //     );
+  //     // }
+  //   });
 
   const texture = useTexture("/tee.png");
 
@@ -607,25 +628,25 @@ function Eye(props) {
     }
   }, [props.inView]);
 
-  useFrame((state, delta) => {
-    if (props.inView === "contact") {
-      const targetRotationX = -state.pointer.y * (Math.PI / 6); // up to 30 degrees vertical rotation
-      const targetRotationZ = state.pointer.x * (Math.PI / 6); // up to 30 degrees horizontal rotation
+  //   useFrame((state, delta) => {
+  //     if (props.inView === "contact") {
+  //       const targetRotationX = -state.pointer.y * (Math.PI / 6); // up to 30 degrees vertical rotation
+  //       const targetRotationZ = state.pointer.x * (Math.PI / 6); // up to 30 degrees horizontal rotation
 
-      easing.dampE(
-        eyeRef1.current.rotation,
-        [targetRotationX, 0, targetRotationZ],
-        0.1,
-        delta
-      );
-      easing.dampE(
-        eyeRef2.current.rotation,
-        [targetRotationX, 0, targetRotationZ],
-        0.1,
-        delta
-      );
-    }
-  });
+  //       easing.dampE(
+  //         eyeRef1.current.rotation,
+  //         [targetRotationX, 0, targetRotationZ],
+  //         0.1,
+  //         delta
+  //       );
+  //       easing.dampE(
+  //         eyeRef2.current.rotation,
+  //         [targetRotationX, 0, targetRotationZ],
+  //         0.1,
+  //         delta
+  //       );
+  //     }
+  //   });
   return (
     // <group
     //   {...props}
@@ -704,7 +725,7 @@ function Eye(props) {
         rotation={[-1.231, 0.165, -1.708]}
         scale={4}
       >
-        <group ref={eyeRef1}>
+        <group ref={eyeRef1} rotation={[-Math.PI / 4, 0, -Math.PI / 12]}>
           <mesh
             castShadow
             receiveShadow
@@ -727,7 +748,7 @@ function Eye(props) {
         rotation={[-1.231, 0.165, -1.708]}
         scale={4}
       >
-        <group ref={eyeRef2}>
+        <group ref={eyeRef2} rotation={[-Math.PI / 4, 0, -Math.PI / 12]}>
           <mesh
             castShadow
             receiveShadow
@@ -764,190 +785,32 @@ function Vinyl(props) {
   useFrame((state, delta) => {
     if (props.modelInView === "merch") {
       diskRef.current.rotation.x += delta / 2.5;
+      diskRef.current.scale.x = 1;
+      diskRef.current.scale.y = 1;
+      diskRef.current.scale.z = 1;
+    } else {
+      diskRef.current.scale.x = 0;
+      diskRef.current.scale.y = 0;
+      diskRef.current.scale.z = 0;
     }
   });
 
   const texture2 = useTexture("/dream.png");
   return (
     <group
-      onClick={() => {
-        window.open(
-          "https://mindchattermerch.com/products/dream-soup-vinyl",
-          "_blank"
-        );
-      }}
       scale={0.9}
       // rotation={[Math.PI / 2, -Math.PI / 2, 0]}
       rotation={[Math.PI / 2, -Math.PI / 2, 0]}
       position={[1.1, 6, 2]}
       {...props}
       dispose={null}
+      onClick={() => {
+        window.open(
+          "https://mindchattermerch.com/products/dream-soup-vinyl",
+          "_blank"
+        );
+      }}
     >
-      {/* <group ref={diskRef} position={[0, 1, 0]}>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle.geometry}
-          material={materials["Material.001"]}
-          position={[0, -0.002, 0]}
-          scale={0.89}
-        >
-          <meshStandardMaterial color="gray" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle002.geometry}
-          material={materials["Material.002"]}
-          position={[0, 0.006, 0]}
-          scale={0.879}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle003.geometry}
-          material={materials["Material.002"]}
-          position={[0, 0.006, 0]}
-          scale={0.777}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle004.geometry}
-          material={materials["Material.002"]}
-          position={[0, 0.006, 0]}
-          scale={0.699}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle005.geometry}
-          material={materials["Material.002"]}
-          position={[0, 0.006, 0]}
-          scale={0.645}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle006.geometry}
-          material={materials["Material.003"]}
-          position={[0, 0, 0.001]}
-          scale={0.991}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle007.geometry}
-          material={materials["Material.004"]}
-          position={[0, -0.005, 0.001]}
-          scale={1.069}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle008.geometry}
-          material={materials["Material.004"]}
-          position={[0, -0.012, 0.001]}
-          scale={2.117}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle001.geometry}
-          material={materials["Material.002"]}
-          position={[0, -0.004, 0]}
-          scale={0.879}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle009.geometry}
-          material={materials["Material.002"]}
-          position={[0, -0.011, 0]}
-          scale={0.777}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle010.geometry}
-          material={materials["Material.002"]}
-          position={[0, -0.011, 0]}
-          scale={0.699}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle011.geometry}
-          material={materials["Material.002"]}
-          position={[0, -0.011, 0]}
-          scale={0.645}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle012.geometry}
-          material={materials["Material.002"]}
-          position={[0, -0.012, 0]}
-          scale={0.879}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle013.geometry}
-          material={materials["Material.003"]}
-          position={[0, -0.005, 0.005]}
-          rotation={[-Math.PI, 0, 0]}
-          scale={0.991}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle014.geometry}
-          material={materials["Material.004"]}
-          position={[0, 0, 0.005]}
-          rotation={[-Math.PI, 0, 0]}
-          scale={1.069}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Circle015.geometry}
-          material={materials["Material.004"]}
-          position={[0, 0.007, 0.005]}
-          rotation={[-Math.PI, 0, 0]}
-          scale={2.117}
-        >
-          <meshBasicMaterial color="black" />
-        </mesh>
-      </group> */}
       <mesh
         ref={diskRef}
         castShadow
@@ -958,7 +821,7 @@ function Vinyl(props) {
         // rotation-y={-Math.PI / 2}
         rotation={[Math.PI, -Math.PI / 2, 0]}
       >
-        <meshStandardMaterial attach="material" map={texture2} />
+        <meshBasicMaterial attach="material" map={texture2} />
       </mesh>
     </group>
   );

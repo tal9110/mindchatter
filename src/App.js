@@ -22,6 +22,7 @@ import { Paper, Transition } from "@mantine/core";
 import { useEffect } from "react";
 import { Modal } from "@mantine/core";
 import { isMobile } from "react-device-detect";
+import MindchattterMobile from "./MindChatterMobile";
 
 const HEADER_HEIGHT = rem(60);
 
@@ -141,6 +142,7 @@ function MyComponent(props) {
   useScript("https://laylo.com/embeds/multidrop.js");
 
   const [opacity, setOpacity] = React.useState(0); // set opacity to 0 by default
+  const isMobile = window.innerWidth <= 768; // Detect if on mobile
 
   useEffect(() => {
     if (props.modelInView === "shows") {
@@ -153,20 +155,22 @@ function MyComponent(props) {
   return (
     <div
       style={{
+        marginTop: "50px",
         position: "absolute",
         zIndex: 0,
         height: "100vh",
         width: "100vw",
         opacity: opacity,
-        transition: "opacity 1s ease-in-out", // this adds the animation effect
+        transition: "opacity 1s ease-in-out",
+        overflowY: "auto",
       }}
     >
       <div
         style={{
-          width: "50%",
-          height: "100%",
+          width: "90%",
+          height: "80%",
           position: "absolute",
-          top: "80%",
+          top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
@@ -176,7 +180,7 @@ function MyComponent(props) {
         data-slug="Se3SH"
         data-color="#b6bdce"
         data-minimal="false"
-      ></div>
+      />
     </div>
   );
 }
@@ -186,10 +190,11 @@ function App() {
 
   const links = [
     { label: "Home", link: "#home" },
-    // { label: "About", link: "#about" },
     { label: "Shows", link: "#shows" },
     { label: "Merch", link: "#merch" },
+    { label: "Contact", link: "#contact" },
   ];
+
   const [opened, { toggle }] = useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
@@ -204,10 +209,17 @@ function App() {
       onClick={(event) => {
         event.preventDefault();
         setActive(link.link);
+        if (link.label === "Home") {
+          setModelInView("home");
+        }
+        if (link.label === "Shows") {
+          setModelInView("shows");
+        }
         if (link.label === "Merch") {
-          setModelInView("second");
-        } else {
-          setModelInView("first");
+          setModelInView("merch");
+        }
+        if (link.label === "Contact") {
+          setModelInView("contact");
         }
       }}
     >
@@ -265,7 +277,10 @@ function App() {
       >
         {isMobile ? (
           <>
-            <Container className={classes.inner} style={{ maxWidth: "100%" }}>
+            <Container
+              className={classes.inner}
+              style={{ position: "relative", maxWidth: "100%" }}
+            >
               <Burger
                 color="white"
                 opened={opened}
@@ -273,25 +288,163 @@ function App() {
                 size="sm"
                 className={classes.burger}
               />
+
               <Group className={classes.links} spacing={5}>
                 {items}
               </Group>
+
               <Image
                 onClick={() => setModelInView("home")}
                 sx={{ cursor: "pointer" }}
                 src={"/mindlogo.png"}
                 width={200}
               />
+              {modelInView === "contact" && (
+                <Container
+                  style={{
+                    position: "absolute",
+                    top: "90%",
+                    left: "50%",
+                    transform: "translate(-50%, 20%)",
+                    zIndex: 1000,
+
+                    opacity: emailOpacity,
+                    transition: "opacity 1.5s ease-in-out",
+                    maxWidth: "100vw", // Set a max width for better fit on mobile devices.
+                    margin: "auto", // Center the container.
+                  }}
+                >
+                  <Stack pt={5} spacing={3}>
+                    {" "}
+                    {/* Reduced padding and spacing for mobile. */}
+                    <Text
+                      cursor="pointer"
+                      color="dimmed"
+                      fontSize={{ base: "18px", md: "25px" }} // Responsive font size.
+                      sx={{
+                        letterSpacing: "1px", // Slightly reduced letterSpacing for mobile.
+                        display: "flex",
+                        flexDirection: "column", // Stack email and "Contact:" on top of each other for better mobile readability.
+                        alignItems: "center", // Center align content.
+                        padding: "5px",
+                        fontFamily: "OffBit, sans-serif",
+                        borderRadius: "5px",
+                        border: "1px solid #e0e0e0",
+                        fontStyle: "italic",
+                        "::before": {
+                          content: '"Contact:"',
+                          fontStyle: "normal",
+                          fontWeight: "bold",
+                          color: "white",
+                        },
+                      }}
+                    >
+                      <a
+                        href="mailto:mindchattermusic@gmail.com"
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        mindchattermusic@gmail.com
+                      </a>
+                    </Text>
+                    {/* Management */}
+                    <Text
+                      cursor="pointer"
+                      color="dimmed"
+                      fontSize={{ base: "18px", md: "25px" }}
+                      sx={{
+                        letterSpacing: "1px",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        padding: "5px",
+                        fontFamily: "OffBit, sans-serif",
+                        borderRadius: "5px",
+                        border: "1px solid #e0e0e0",
+                        fontStyle: "italic",
+                        "::before": {
+                          content: '"Management:"',
+                          fontStyle: "normal",
+                          fontWeight: "bold",
+                          color: "white",
+                        },
+                      }}
+                    >
+                      <a
+                        href="mailto:andrew@night-tones.com"
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        andrew@night-tones.com
+                      </a>
+
+                      <a
+                        href="mailto:connor@night-tones.com"
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        connor@night-tones.com
+                      </a>
+                    </Text>
+                    {/* Bookings */}
+                    <Text
+                      cursor="pointer"
+                      color="dimmed"
+                      fontSize={{ base: "18px", md: "25px" }}
+                      sx={{
+                        letterSpacing: "1px",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        padding: "5px",
+                        fontFamily: "OffBit, sans-serif",
+                        borderRadius: "5px",
+                        border: "1px solid #e0e0e0",
+                        fontStyle: "italic",
+                        "::before": {
+                          content: '"Bookings:"',
+                          fontStyle: "normal",
+                          fontWeight: "bold",
+                          color: "white",
+                        },
+                      }}
+                    >
+                      <a
+                        href="mailto:jmoss@teamwass.com"
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        jmoss@teamwass.com
+                      </a>
+
+                      <a
+                        href="mailto:lchenfeld@teamwass.com"
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        lchenfeld@teamwass.com
+                      </a>
+                    </Text>
+                  </Stack>
+                </Container>
+              )}
               <Center>
                 <Group spacing={2} noWrap position="right">
                   <ActionIcon variant="transparent" size="lg">
-                    <IconBrandInstagram size="1.2rem" stroke={2} />
+                    <IconBrandInstagram
+                      onClick={handleInstagramClick}
+                      size="1.2rem"
+                      stroke={2}
+                    />
                   </ActionIcon>
                   <ActionIcon variant="transparent" size="lg">
-                    <IconBrandTwitter size="1.2rem" stroke={2} />
+                    <IconBrandTwitter
+                      onClick={handleTwitterClick}
+                      size="1.2rem"
+                      stroke={2}
+                    />
                   </ActionIcon>
                   <ActionIcon variant="transparent" size="lg">
-                    <IconBrandYoutube size="1.2rem" stroke={2} />
+                    <IconBrandYoutube
+                      onClick={handleYoutubeClick}
+                      size="1.2rem"
+                      stroke={2}
+                    />
                   </ActionIcon>
                   <ActionIcon variant="transparent" size="lg">
                     <IconMail size="1.2rem" stroke={2} />
@@ -584,7 +737,11 @@ function App() {
         </>
       )}
 
-      <Mindchattter modelInView={modelInView} />
+      {isMobile ? (
+        <MindchattterMobile modelInView={modelInView} />
+      ) : (
+        <Mindchattter modelInView={modelInView} />
+      )}
     </>
   );
 }
