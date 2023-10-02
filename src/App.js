@@ -153,38 +153,75 @@ function MyComponent(props) {
   }, [props.modelInView]);
 
   return (
-    <div
-      style={{
-        marginTop: "80px",
-        position: "absolute",
-        zIndex: 0,
-        height: "100vh",
-        width: "50vw",
-        opacity: opacity,
-        transition: "opacity 1s ease-in-out",
-        overflowY: "auto",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-      }}
-    >
-      <div
-        style={{
-          width: "90%",
-          height: "80%",
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-        id="multidrop"
-        data-theme="dark"
-        data-username="mindchatter_"
-        data-slug="Se3SH"
-        data-color="#b6bdce"
-        data-minimal="false"
-      />
-    </div>
+    <>
+      {isMobile ? (
+        <div
+          style={{
+            marginTop: "80px",
+            position: "absolute",
+            zIndex: 0,
+            height: "100vh",
+            width: "100vw",
+            opacity: opacity,
+            transition: "opacity 1s ease-in-out",
+            overflowY: "auto",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <div
+            style={{
+              width: "90%",
+              height: "80%",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+            id="multidrop"
+            data-theme="dark"
+            data-username="mindchatter_"
+            data-slug="Se3SH"
+            data-color="#b6bdce"
+            data-minimal="false"
+          />
+        </div>
+      ) : (
+        <div
+          style={{
+            marginTop: "70px",
+            position: "absolute",
+            zIndex: 0,
+            height: "100vh",
+            width: "50vw",
+            opacity: opacity,
+            transition: "opacity 1s ease-in-out",
+            overflowY: "auto",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <div
+            style={{
+              width: "90%",
+              height: "80%",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+            id="multidrop"
+            data-theme="dark"
+            data-username="mindchatter_"
+            data-slug="Se3SH"
+            data-color="#b6bdce"
+            data-minimal="false"
+          />
+        </div>
+      )}
+    </>
   );
 }
 
