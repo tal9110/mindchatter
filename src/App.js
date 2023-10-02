@@ -159,10 +159,13 @@ function MyComponent(props) {
         position: "absolute",
         zIndex: 0,
         height: "100vh",
-        width: "100vw",
+        width: "50vw",
         opacity: opacity,
         transition: "opacity 1s ease-in-out",
         overflowY: "auto",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
       }}
     >
       <div

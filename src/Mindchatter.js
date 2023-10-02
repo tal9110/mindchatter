@@ -145,7 +145,7 @@ export default function Mindchatter({ modelInView }) {
 
 function Model(props) {
   //   const { nodes, materials } = useGLTF("/bust.glb");
-  const { nodes, materials } = useGLTF("/mindchatterBust.gltf");
+  const { nodes, materials } = useGLTF("/mindchatterBust-transformed.glb");
   const group = useRef();
   const light = useRef();
   const meshRef = useRef();
@@ -207,7 +207,7 @@ function Model(props) {
   });
   return (
     <group ref={group} {...props} dispose={null}>
-      <mesh
+      {/* <mesh
         position={[0.5, -0.4, 0]}
         scale={2.4}
         ref={meshRef}
@@ -216,6 +216,16 @@ function Model(props) {
         geometry={nodes.Default.geometry}
         material={materials.Mat}
         rotation={[0, -Math.PI / 2.5, 0]}
+      > */}
+      <mesh
+        position={[0.5, -0.4, 0]}
+        scale={2.4}
+        ref={meshRef}
+        rotation={[0, -Math.PI / 2.5, 0]}
+        castShadow
+        receiveShadow
+        geometry={nodes.Default.geometry}
+        material={materials.Mat}
       >
         {/* <meshLambertMaterial color="#404044" /> */}
         <meshLambertMaterial color="#6a6a6b" />
@@ -240,7 +250,7 @@ function Model(props) {
 }
 
 function Hoodie(props) {
-  const { nodes, materials } = useGLTF("/hoodieSmaller.glb");
+  const { nodes, materials } = useGLTF("/hoodieSmaller-transformed.glb");
   const groupRef = useRef();
   useFrame((state, delta) => {
     easing.dampE(
@@ -267,96 +277,6 @@ function Hoodie(props) {
       {...props}
       dispose={null}
     >
-      {/* <group position={[0, -0.839, 0]}>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cloth_mesh.geometry}
-          // material={materials["Force Fleece_FRONT_134561"]}
-        >
-          <meshLambertMaterial color="#A89C81" />
-          <Decal
-            // debug
-            position={[0, 1.35, -0.35]}
-            rotation={[0, 0, 0]}
-            scale={0.5}
-            map={texture}
-            polygonOffset
-            polygonOffsetFactor={2} // The mesh should take precedence over the original
-
-            // map-anisotropy={16}
-          />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cloth_mesh_1.geometry}
-          // material={materials["2x2 Rib_FRONT_134483"]}
-        >
-          <meshLambertMaterial color="#A89C81" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cloth_mesh_2.geometry}
-          // material={materials.Fabric374733_FRONT_76578}
-        >
-          <meshLambertMaterial color="#A89C81" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cloth_mesh_3.geometry}
-          // material={materials.Fabric374733_SIDE_76578}
-        >
-          <meshLambertMaterial color="#A89C81" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cloth_mesh_4.geometry}
-          // material={materials["Fabric374733_FRONT_76578.001"]}
-        >
-          <meshLambertMaterial color="#A89C81" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cloth_mesh_5.geometry}
-          // material={materials["Fabric374733_SIDE_76578.001"]}
-        >
-          <meshLambertMaterial color="#A89C81" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes._mesh004.geometry}
-          // material={materials.Material94287}
-          position={[0.008, 0.967, 0.188]}
-          rotation={[0.044, -0.223, 0.026]}
-        >
-          <meshLambertMaterial color="#A89C81" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes._mesh005.geometry}
-          // material={materials.Material94287}
-          position={[0.008, 0.967, 0.188]}
-          rotation={[0.046, -0.127, -0.076]}
-        >
-          <meshLambertMaterial color="#A89C81" />
-        </mesh>
-      </group>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes._mesh.geometry}
-        // material={materials.Material94283}
-      >
-        <meshLambertMaterial color="#A89C81" />
-      </mesh>
-    </group> */}
       <group position={[0, -0.839, 0]}>
         <mesh
           castShadow
@@ -393,27 +313,12 @@ function Hoodie(props) {
         >
           <meshLambertMaterial color="#A89C81" />
         </mesh>
+
         <mesh
           castShadow
           receiveShadow
           geometry={nodes.Cloth_mesh_3.geometry}
-          material={materials.Fabric374733_SIDE_76578}
-        >
-          <meshLambertMaterial color="#A89C81" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cloth_mesh_4.geometry}
           material={materials["Fabric374733_FRONT_76578.001"]}
-        >
-          <meshLambertMaterial color="#A89C81" />
-        </mesh>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cloth_mesh_5.geometry}
-          material={materials["Fabric374733_SIDE_76578.001"]}
         >
           <meshLambertMaterial color="#A89C81" />
         </mesh>
@@ -423,7 +328,7 @@ function Hoodie(props) {
 }
 
 function Model2(props) {
-  const { nodes, materials } = useGLTF("/merch.glb");
+  const { nodes, materials } = useGLTF("/merch-transformed.glb");
   const group = useRef();
   const light = useRef();
   useFrame((state, delta) => {
@@ -493,6 +398,22 @@ function Model2(props) {
         material={materials.Body_FRONT_2664}
       >
         <meshLambertMaterial color="#cfcfcf" />
+        <Decal
+          // debug
+          position={[0, 1.42, 0.15]}
+          rotation={[0, 0, 0]}
+          scale={0.2}
+          map={texture}
+          // map-anisotropy={16}
+        />
+      </mesh>
+      {/* <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Body_Back_Node.geometry}
+        material={materials.Body_FRONT_2664}
+      >
+        <meshLambertMaterial color="#cfcfcf" />
       </mesh>
       <mesh
         castShadow
@@ -542,7 +463,7 @@ function Model2(props) {
         material={materials.Sleeves_FRONT_2669}
       >
         <meshLambertMaterial color="#cfcfcf" />
-      </mesh>
+      </mesh> */}
       <spotLight
         // angle={0.5}
         // penumbra={0.5}
