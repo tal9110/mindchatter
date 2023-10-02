@@ -155,7 +155,7 @@ function MyComponent(props) {
   return (
     <div
       style={{
-        marginTop: "50px",
+        marginTop: "80px",
         position: "absolute",
         zIndex: 0,
         height: "100vh",
