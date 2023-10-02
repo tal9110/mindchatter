@@ -343,7 +343,7 @@ function Hoodie(props) {
 }
 
 function Model2(props) {
-  const { nodes, materials } = useGLTF("/merch.glb");
+  const { nodes, materials } = useGLTF("/merch-transformed.glb");
   const group = useRef();
   const light = useRef();
   let time = 0;
