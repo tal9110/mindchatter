@@ -181,6 +181,8 @@ function Model(props) {
       });
     }
   }, [props.inView2]);
+  let accumulatedTime = 0;
+
   useFrame((state, delta) => {
     if (props.inView2 === "merch" || props.inView2 === "shows") {
       //   meshRef.current.opacity = 0;
@@ -194,25 +196,29 @@ function Model(props) {
     meshRef.current.material.transparent = true;
     // console.log(group.current);
     // if (props.inView) {
-    easing.dampE(
-      group.current.rotation,
-      [0, -state.pointer.x * (Math.PI / 9), 0],
-      1.5,
-      delta
-    );
-    easing.damp3(
-      group.current.position,
-      [0, 0, 1 - Math.abs(state.pointer.x)],
-      1,
-      delta
-    );
-    // }
-    easing.damp3(
-      light.current.position,
-      [state.pointer.x * 12, 0, 8 + state.pointer.y * 4 + 1],
-      0.2,
-      delta
-    );
+    // easing.dampE(
+    //   group.current.rotation,
+    //   [0, -state.pointer.x * (Math.PI / 9), 0],
+    //   1.5,
+    //   delta
+    // );
+    // easing.damp3(
+    //   group.current.position,
+    //   [0, 0, 1 - Math.abs(state.pointer.x)],
+    //   1,
+    //   delta
+    // );
+    // // }
+    // easing.damp3(
+    //   light.current.position,
+    //   [state.pointer.x * 12, 0, 8 + state.pointer.y * 4 + 1],
+    //   0.2,
+    //   delta
+    // );
+    accumulatedTime += delta;
+
+    meshRef.current.rotation.y =
+      (Math.PI / 5) * Math.sin(accumulatedTime * 0.3) - Math.PI / 2;
     // }
   });
   return (
