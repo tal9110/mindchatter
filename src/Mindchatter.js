@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Canvas, extend, useFrame } from "@react-three/fiber";
 import {
   useGLTF,
@@ -6,12 +6,15 @@ import {
   Html,
   CameraControls,
   Decal,
+  Text,
 } from "@react-three/drei";
 import { easing, geometry } from "maath";
 import gsap from "gsap";
 import { Mesh } from "three";
 import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
+import { useProgress } from "@react-three/drei";
+import { Jelly } from "@uiball/loaders";
 
 extend(geometry);
 
@@ -61,25 +64,32 @@ export default function Mindchatter({ modelInView }) {
       camera={{ position: [0, 1.5, 14], fov: 45 }}
     >
       <fog attach="fog" args={["black", 0, 20]} />
-      {/* <ambientLight intensity={modelInView === "contact" ? 10 : 4} /> */}
-      <ambientLight intensity={4} />
+      <Suspense
+        fallback={
+          <Html>
+            <Jelly size={80} speed={0.9} color="#424243" />
+          </Html>
+        }
+      >
+        {/* <ambientLight intensity={modelInView === "contact" ? 10 : 4} /> */}
+        <ambientLight intensity={4} />
 
-      <pointLight position={[10, -10, -20]} intensity={150} />
-      <pointLight position={[-10, -10, -20]} intensity={150} />
-      {/* <Model position={[0, -5.5, 3]} rotation={[0, 0, 0]} /> */}
+        <pointLight position={[10, -10, -20]} intensity={150} />
+        <pointLight position={[-10, -10, -20]} intensity={150} />
+        {/* <Model position={[0, -5.5, 3]} rotation={[0, 0, 0]} /> */}
 
-      <Eye inView={modelInView} />
-      <group ref={firstGroup}>
-        <Model
-          inView={modelInView === "first"}
-          inView2={modelInView}
-          //   position={firstModelPos}
-          //   position={[0, -5.5, 1]}
-          rotation={[0, 0, 0]}
-        />
-      </group>
-      <group ref={secondGroup}>
-        {/* <group position={[-1.5, 0.65, -3]}>
+        <Eye inView={modelInView} />
+        <group ref={firstGroup}>
+          <Model
+            inView={modelInView === "first"}
+            inView2={modelInView}
+            //   position={firstModelPos}
+            //   position={[0, -5.5, 1]}
+            rotation={[0, 0, 0]}
+          />
+        </group>
+        <group ref={secondGroup}>
+          {/* <group position={[-1.5, 0.65, -3]}>
           <Model2
             num={1}
             inView={modelInView === "second"}
@@ -121,24 +131,25 @@ export default function Mindchatter({ modelInView }) {
             rotation={[0, 0, 0]}
           />
         </group> */}
-        <group position={[-1.5, 0, -3]}>
-          <Model2
-            num={6}
-            inView={modelInView === "second"}
-            rotation={[0, 0, 0]}
-          />
+          <group position={[-1.5, 0, -3]}>
+            <Model2
+              num={6}
+              inView={modelInView === "second"}
+              rotation={[0, 0, 0]}
+            />
+          </group>
+          <Hoodie />
+          <Vinyl modelInView={modelInView} />
         </group>
-        <Hoodie />
-        <Vinyl modelInView={modelInView} />
-      </group>
-      <SoftShadows samples={3} />
-      <CameraControls
-        minPolarAngle={0}
-        maxPolarAngle={Math.PI / 2}
-        minAzimuthAngle={-Math.PI / 2}
-        maxAzimuthAngle={Math.PI / 2}
-        enabled={false}
-      />
+        <SoftShadows samples={3} />
+        <CameraControls
+          minPolarAngle={0}
+          maxPolarAngle={Math.PI / 2}
+          minAzimuthAngle={-Math.PI / 2}
+          maxAzimuthAngle={Math.PI / 2}
+          enabled={false}
+        />
+      </Suspense>
     </Canvas>
   );
 }
