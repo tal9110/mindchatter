@@ -160,7 +160,7 @@ function MyComponent(props) {
             marginTop: "80px",
             position: "absolute",
             zIndex: 0,
-            height: "100vh",
+            height: "80vh",
             width: "100vw",
             opacity: opacity,
             transition: "opacity 1s ease-in-out",
@@ -182,8 +182,8 @@ function MyComponent(props) {
             id="multidrop"
             data-theme="dark"
             data-username="mindchatter_"
-            data-slug="Se3SH"
-            data-color="#b6bdce"
+            data-slug="achorusofmonologuestour"
+            data-color="#070b11"
             data-minimal="false"
           />
         </div>
@@ -193,7 +193,7 @@ function MyComponent(props) {
             marginTop: "70px",
             position: "absolute",
             zIndex: 0,
-            height: "100vh",
+            height: "65vh",
             width: "50vw",
             opacity: opacity,
             transition: "opacity 1s ease-in-out",
@@ -206,7 +206,7 @@ function MyComponent(props) {
           <div
             style={{
               width: "90%",
-              height: "80%",
+              height: "100%",
               position: "absolute",
               top: "50%",
               left: "50%",
@@ -215,8 +215,8 @@ function MyComponent(props) {
             id="multidrop"
             data-theme="dark"
             data-username="mindchatter_"
-            data-slug="Se3SH"
-            data-color="#b6bdce"
+            data-slug="achorusofmonologuestour"
+            data-color="#070b11"
             data-minimal="false"
           />
         </div>
