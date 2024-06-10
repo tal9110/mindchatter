@@ -127,10 +127,9 @@ const useStyles = createStyles((theme) => ({
 function useScript(src) {
   useEffect(() => {
     const script = document.createElement("script");
-    script.type = "module";
     script.src = src;
+    script.async = true;
     document.body.appendChild(script);
-
     return () => {
       document.body.removeChild(script);
     };
@@ -158,7 +157,7 @@ function MyComponent(props) {
       {isMobile ? (
         <div
           style={{
-            marginTop: "80px",
+            marginTop: "60px",
             position: "absolute",
             zIndex: 0,
             height: "80vh",
@@ -187,21 +186,19 @@ function MyComponent(props) {
             }}
           >
             <a
-              className="bit-widget-initializer"
+              class="bit-widget-initializer"
               data-artist-name="id_15393755"
-              data-background-color="#ffffff"
+              data-background-color="rgba(0,0,0,1)"
               data-separator-color="#DDDDDD"
-              data-text-color="#424242"
-              data-font="Helvetica"
+              data-text-color="rgba(255,255,255,1)"
+              data-font="Monaco"
               data-auto-style="true"
               data-button-label-capitalization="capitalize"
               data-header-capitalization="undefined"
               data-location-capitalization="capitalize"
               data-venue-capitalization="capitalize"
-              data-display-local-dates="true"
               data-local-dates-position="tab"
-              data-display-past-dates="true"
-              data-display-details=""
+              data-display-details="false"
               data-display-lineup=""
               data-display-start-time=""
               data-social-share-icon="true"
@@ -216,10 +213,10 @@ function MyComponent(props) {
               data-event-custom-ticket-text="undefined"
               data-event-ticket-text="TICKETS"
               data-event-ticket-icon=""
-              data-event-ticket-cta-text-color="#FFFFFF"
-              data-event-ticket-cta-bg-color="#4A4A4A"
-              data-event-ticket-cta-border-color="#4A4A4A"
-              data-event-ticket-cta-border-width="0px"
+              data-event-ticket-cta-text-color="rgba(255,255,255,1)"
+              data-event-ticket-cta-bg-color="rgba(255,255,255,1)"
+              data-event-ticket-cta-border-color="rgba(255,255,255,1)"
+              data-event-ticket-cta-border-width="1px"
               data-event-ticket-cta-border-radius="4px"
               data-sold-out-button-text-color="#FFFFFF"
               data-sold-out-button-background-color="#4A4A4A"
@@ -293,7 +290,7 @@ function MyComponent(props) {
       ) : (
         <div
           style={{
-            marginTop: "70px",
+            marginTop: "30px",
             position: "absolute",
             zIndex: 0,
             height: "65vh",
@@ -308,7 +305,7 @@ function MyComponent(props) {
         >
           <div
             style={{
-              marginTop: "70px",
+              marginTop: "30px",
               position: "absolute",
               zIndex: 0,
               height: "65vh",
@@ -322,21 +319,19 @@ function MyComponent(props) {
             }}
           >
             <a
-              className="bit-widget-initializer"
+              class="bit-widget-initializer"
               data-artist-name="id_15393755"
-              data-background-color="#ffffff"
+              data-background-color="rgba(0,0,0,1)"
               data-separator-color="#DDDDDD"
-              data-text-color="#424242"
-              data-font="Helvetica"
+              data-text-color="rgba(255,255,255,1)"
+              data-font="Monaco"
               data-auto-style="true"
               data-button-label-capitalization="capitalize"
               data-header-capitalization="undefined"
               data-location-capitalization="capitalize"
               data-venue-capitalization="capitalize"
-              data-display-local-dates="true"
               data-local-dates-position="tab"
-              data-display-past-dates="true"
-              data-display-details=""
+              data-display-details="false"
               data-display-lineup=""
               data-display-start-time=""
               data-social-share-icon="true"
@@ -351,10 +346,10 @@ function MyComponent(props) {
               data-event-custom-ticket-text="undefined"
               data-event-ticket-text="TICKETS"
               data-event-ticket-icon=""
-              data-event-ticket-cta-text-color="#FFFFFF"
-              data-event-ticket-cta-bg-color="#4A4A4A"
-              data-event-ticket-cta-border-color="#4A4A4A"
-              data-event-ticket-cta-border-width="0px"
+              data-event-ticket-cta-text-color="rgba(255,255,255,1)"
+              data-event-ticket-cta-bg-color="rgba(255,255,255,1)"
+              data-event-ticket-cta-border-color="rgba(255,255,255,1)"
+              data-event-ticket-cta-border-width="1px"
               data-event-ticket-cta-border-radius="4px"
               data-sold-out-button-text-color="#FFFFFF"
               data-sold-out-button-background-color="#4A4A4A"
